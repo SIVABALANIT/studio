@@ -59,9 +59,12 @@ export function McqTest({ test, domain, level }: McqTestProps) {
 
     const finalScore = Math.round((correctAnswers / test.questions.length) * 100);
     const rewardTokens = correctAnswers;
+    const levelPassed = correctAnswers >= 8;
 
     addTokens(rewardTokens);
-    completeLevel(domain.id, level);
+    if (levelPassed) {
+      completeLevel(domain.id, level);
+    }
 
 
     setIsFinished(true);
@@ -73,6 +76,7 @@ export function McqTest({ test, domain, level }: McqTestProps) {
             score: finalScore.toString(),
             rewardTokens: rewardTokens.toString(),
             level: level.toString(),
+            levelPassed: levelPassed.toString(),
         });
         router.push(`/test/${domain.id}/result?${params.toString()}`);
     }, 5000); // 5-second delay to review answers

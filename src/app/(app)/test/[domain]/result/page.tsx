@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { PartyPopper, ArrowRight } from 'lucide-react';
+import { PartyPopper, ArrowRight, RotateCw } from 'lucide-react';
 import Link from 'next/link';
 
 const AnimatedCounter = ({ endValue }: { endValue: number }) => {
@@ -53,9 +53,11 @@ export default function TestResultPage() {
   const score = searchParams.get('score');
   const rewardTokens = searchParams.get('rewardTokens');
   const level = searchParams.get('level');
+  const levelPassed = searchParams.get('levelPassed') === 'true';
   const domainId = pathname.split('/')[2];
   
   const nextLevel = level ? parseInt(level, 10) + 1 : 2;
+  const currentLevel = level ? parseInt(level, 10) : 1;
 
   if (!score || !rewardTokens || !level) {
     return (
@@ -72,6 +74,12 @@ export default function TestResultPage() {
       </div>
     );
   }
+  
+  const title = levelPassed ? `Level ${level} Complete!` : `Try Again!`;
+  const description = levelPassed
+    ? `You scored ${score}% and earned new tokens.`
+    : `You scored ${score}%. You need at least 80% to pass.`;
+
 
   return (
     <div className="container mx-auto max-w-md">
@@ -80,9 +88,9 @@ export default function TestResultPage() {
                 <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
                     <PartyPopper className="h-10 w-10 text-primary" />
                 </div>
-                <CardTitle className="text-3xl font-bold font-headline">Level {level} Complete!</CardTitle>
+                <CardTitle className="text-3xl font-bold font-headline">{title}</CardTitle>
                 <CardDescription>
-                    You scored {score}% and earned new tokens.
+                    {description}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -95,12 +103,21 @@ export default function TestResultPage() {
             </CardContent>
             <CardFooter className="flex-col gap-2 mt-4 sm:flex-row sm:justify-center">
                 <Button size="lg" variant="outline" className="w-full" onClick={() => router.push('/dashboard')}>Back to Dashboard</Button>
-                <Link href={`/test/${domainId}/level/${nextLevel}`} className="w-full">
-                    <Button size="lg" className="w-full">
-                        Next Level
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                </Link>
+                {levelPassed ? (
+                    <Link href={`/test/${domainId}/level/${nextLevel}`} className="w-full">
+                        <Button size="lg" className="w-full">
+                            Next Level
+                            <ArrowRight className="ml-2 h-5 w-5" />
+                        </Button>
+                    </Link>
+                ) : (
+                    <Link href={`/test/${domainId}/level/${currentLevel}`} className="w-full">
+                        <Button size="lg" className="w-full">
+                            Retry Level
+                            <RotateCw className="ml-2 h-5 w-5" />
+                        </Button>
+                    </Link>
+                )}
             </CardFooter>
         </Card>
     </div>
