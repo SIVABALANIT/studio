@@ -38,12 +38,6 @@ export function UserDropdown() {
                 <AvatarImage src={user?.avatar} alt={user?.name} />
                 <AvatarFallback>{user?.name?.charAt(0) ?? 'U'}</AvatarFallback>
             </Avatar>
-            {sidebarState === 'expanded' && (
-              <div className="flex flex-col truncate">
-                <span className="font-semibold text-sm truncate">{user.name}</span>
-                <span className="text-xs text-muted-foreground truncate">{user.contact}</span>
-              </div>
-            )}
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" side="right" sideOffset={12} className="w-56">
