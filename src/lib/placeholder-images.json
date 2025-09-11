@@ -36,6 +36,12 @@
       "description": "User avatar 6",
       "imageUrl": "https://picsum.photos/seed/avatar6/100/100",
       "imageHint": "person face"
+    },
+    {
+      "id": "hero",
+      "description": "Hero image for landing page",
+      "imageUrl": "https://picsum.photos/seed/hero/600/600",
+      "imageHint": "education growth"
     }
   ]
 }
