@@ -21,7 +21,7 @@ export default function DashboardPage() {
           Enhance your intelligence
         </h1>
         <p className="text-muted-foreground text-lg">
-          Choose a domain to test your skills and earn rewards.
+          Choose a domain to test your skills
         </p>
       </div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
