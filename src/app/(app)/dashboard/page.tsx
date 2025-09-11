@@ -18,7 +18,7 @@ export default function DashboardPage() {
     <div className="container mx-auto">
       <div className="mb-8">
         <h1 className="text-4xl font-bold font-headline tracking-tight">
-          Welcome Back!
+          Enhance your intelligence
         </h1>
         <p className="text-muted-foreground text-lg">
           Choose a domain to test your skills and earn rewards.
