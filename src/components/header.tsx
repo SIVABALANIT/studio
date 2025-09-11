@@ -26,7 +26,6 @@ export function Header() {
                 <span className="tabular-nums">{user.tokens.toLocaleString()}</span>
             </div>
         )}
-        <UserDropdown />
       </div>
     </header>
   );
