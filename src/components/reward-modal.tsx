@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -18,6 +19,7 @@ type RewardModalProps = {
   open: boolean;
   score: number;
   rewardData: GenerateRewardMagnitudeOutput | null;
+  onClose: () => void;
 };
 
 const AnimatedCounter = ({ endValue }: { endValue: number }) => {
@@ -47,9 +49,9 @@ const AnimatedCounter = ({ endValue }: { endValue: number }) => {
   return <span className="tabular-nums">{count.toLocaleString()}</span>;
 };
 
-export function RewardModal({ open, score, rewardData }: RewardModalProps) {
+export function RewardModal({ open, score, rewardData, onClose }: RewardModalProps) {
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md text-center">
         <DialogHeader className="items-center">
           <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">

@@ -1,6 +1,7 @@
+
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -14,11 +15,10 @@ import { Progress } from '@/components/ui/progress';
 import { getReward } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
-import { RewardModal } from './reward-modal';
-import type { GenerateRewardMagnitudeOutput } from '@/ai/flows/generate-reward-magnitude';
 import type { Test, Domain, Question } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { CheckCircle, XCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 type McqTestProps = {
   test: Test;
@@ -26,13 +26,12 @@ type McqTestProps = {
 };
 
 export function McqTest({ test, domain }: McqTestProps) {
+  const router = useRouter();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-  const [score, setScore] = useState(0);
-  const [rewardData, setRewardData] = useState<GenerateRewardMagnitudeOutput | null>(null);
-
+  
   const { toast } = useToast();
   const { addTokens } = useUser();
 
@@ -61,7 +60,6 @@ export function McqTest({ test, domain }: McqTestProps) {
     });
 
     const finalScore = Math.round((correctAnswers / test.questions.length) * 100);
-    setScore(finalScore);
 
     const result = await getReward({
       testScore: finalScore,
@@ -70,9 +68,16 @@ export function McqTest({ test, domain }: McqTestProps) {
     });
 
     if (result.success && result.data) {
-      setRewardData(result.data);
       addTokens(result.data.rewardTokens);
       setIsFinished(true);
+
+      const params = new URLSearchParams({
+        score: finalScore.toString(),
+        rewardTokens: result.data.rewardTokens.toString(),
+        reasoning: result.data.reasoning,
+      });
+      router.push(`/test/${domain.id}/result?${params.toString()}`);
+
     } else {
       toast({
         title: 'Error',
@@ -163,11 +168,6 @@ export function McqTest({ test, domain }: McqTestProps) {
           )}
         </CardFooter>
       </Card>
-      <RewardModal
-        open={isFinished && !!rewardData}
-        score={score}
-        rewardData={rewardData}
-      />
     </>
   );
 }
