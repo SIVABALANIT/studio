@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useUser } from '@/hooks/use-user';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Flame, Mail, MapPin, Twitter, Linkedin, Edit, Save, X, Award, Star, Shield } from 'lucide-react';
+import { Flame, Mail, MapPin, Twitter, Linkedin, Edit, Save, X, Award, Star, Shield, Image as ImageIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +19,7 @@ import { Progress } from '@/components/ui/progress';
 
 type ProfileFormData = {
     name: string;
+    avatar: string;
     contact: string;
     location: string;
     socials: {
@@ -46,12 +47,15 @@ export default function ProfilePage() {
   const { user, updateUser } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   
-  const { register, handleSubmit, reset, formState: { isDirty } } = useForm<ProfileFormData>();
+  const { register, handleSubmit, reset, formState: { isDirty }, watch } = useForm<ProfileFormData>();
+
+  const avatarUrl = watch('avatar');
 
   useEffect(() => {
     if (user && isEditing) {
       reset({
         name: user.name,
+        avatar: user.avatar,
         contact: user.contact || '',
         location: user.location || '',
         socials: {
@@ -81,6 +85,7 @@ export default function ProfilePage() {
   const onSubmit = (data: ProfileFormData) => {
     const updatedUser: Partial<User> = {
         name: data.name,
+        avatar: data.avatar,
         contact: data.contact,
         location: data.location,
         socials: {
@@ -122,13 +127,22 @@ export default function ProfilePage() {
             <Card>
               <CardHeader className="items-center text-center">
                 <Avatar className="h-24 w-24 mb-4">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src={isEditing ? avatarUrl : user.avatar} alt={user.name} />
                   <AvatarFallback className="text-3xl">
                     {user.name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
                 {isEditing ? (
-                  <Input {...register('name')} className="text-2xl text-center font-bold" />
+                  <div className="w-full space-y-4">
+                    <Input {...register('name')} className="text-2xl text-center font-bold" />
+                    <div>
+                      <Label htmlFor="avatar" className="sr-only">Avatar URL</Label>
+                      <div className="relative">
+                        <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input id="avatar" {...register('avatar')} placeholder="Image URL" className="pl-9" />
+                      </div>
+                    </div>
+                  </div>
                 ) : (
                   <CardTitle className="text-2xl">{user.name}</CardTitle>
                 )}
@@ -280,3 +294,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    
