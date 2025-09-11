@@ -100,5 +100,5 @@ export const users: User[] = [
     { id: 3, name: 'James Smith', avatar: 'https://picsum.photos/seed/avatar3/100/100', tokens: 980 },
     { id: 4, name: 'Priya Patel', avatar: 'https://picsum.photos/seed/avatar4/100/100', tokens: 950 },
     { id: 5, name: 'Chen Wei', avatar: 'https://picsum.photos/seed/avatar5/100/100', tokens: 820 },
-    { id: 6, name: 'You', avatar: 'https://picsum.photos/seed/avatar6/100/100', tokens: 750 },
+    { id: 6, name: 'You', avatar: 'https://picsum.photos/seed/avatar6/100/100', tokens: 100 },
 ];
