@@ -9,6 +9,7 @@ interface UserContextType {
   user: User | null;
   addTokens: (amount: number) => void;
   completeLevel: (domainId: string, level: number) => void;
+  updateUser: (updatedData: Partial<User>) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -42,8 +43,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     });
   }
 
+  const updateUser = (updatedData: Partial<User>) => {
+    setUser(currentUser => {
+      if (!currentUser) return null;
+      return { ...currentUser, ...updatedData };
+    });
+  };
+
   return (
-    <UserContext.Provider value={{ user, addTokens, completeLevel }}>
+    <UserContext.Provider value={{ user, addTokens, completeLevel, updateUser }}>
       {children}
     </UserContext.Provider>
   );
