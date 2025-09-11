@@ -58,11 +58,11 @@ export function McqTest({ test, domain, level }: McqTestProps) {
     });
 
     const finalScore = Math.round((correctAnswers / test.questions.length) * 100);
-    const rewardTokens = correctAnswers;
     const levelPassed = correctAnswers >= 8;
-
-    addTokens(rewardTokens);
+    const rewardTokens = levelPassed ? correctAnswers : 0;
+    
     if (levelPassed) {
+      addTokens(rewardTokens);
       completeLevel(domain.id, level);
     }
 
