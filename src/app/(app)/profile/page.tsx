@@ -5,17 +5,15 @@ import React, { useState, useEffect } from 'react';
 import { useUser } from '@/hooks/use-user';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Flame, Mail, MapPin, Twitter, Linkedin, Edit, Save, X, Award, Star, Shield, Image as ImageIcon, CircleDollarSign, Fingerprint } from 'lucide-react';
+import { Flame, Mail, MapPin, Twitter, Linkedin, Edit, Save, X, Award, Star, Shield, Image as ImageIcon, Fingerprint } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import type { User, Domain } from '@/lib/types';
 import { domains } from '@/lib/data';
 import { DomainIcon } from '@/components/domain-icon';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 
 type ProfileFormData = {
     name: string;
@@ -47,9 +45,16 @@ export default function ProfilePage() {
   const { user, updateUser } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   
-  const { register, handleSubmit, reset, formState: { isDirty }, watch } = useForm<ProfileFormData>();
+  const { register, handleSubmit, reset, formState: { isDirty }, watch, control, setValue } = useForm<ProfileFormData>();
 
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const avatarUrl = watch('avatar');
+
+  useEffect(() => {
+    if (user) {
+        setAvatarPreview(user.avatar);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (user && isEditing) {
@@ -63,6 +68,7 @@ export default function ProfilePage() {
           linkedin: user.socials?.linkedin || '',
         },
       });
+      setAvatarPreview(user.avatar);
     }
   }, [user, isEditing, reset]);
 
@@ -78,6 +84,7 @@ export default function ProfilePage() {
   const handleEditToggle = () => {
     if (isEditing) {
         reset(); // Reset form changes if canceling
+        setAvatarPreview(user.avatar);
     }
     setIsEditing(!isEditing);
   };
@@ -85,7 +92,7 @@ export default function ProfilePage() {
   const onSubmit = (data: ProfileFormData) => {
     const updatedUser: Partial<User> = {
         name: data.name,
-        avatar: data.avatar,
+        avatar: avatarPreview || data.avatar,
         contact: data.contact,
         location: data.location,
         socials: {
@@ -129,19 +136,41 @@ export default function ProfilePage() {
             <Card>
               <CardHeader className="items-center text-center">
                 <Avatar className="h-24 w-24 mb-4">
-                  <AvatarImage src={isEditing ? avatarUrl : user.avatar} alt={user.name} />
+                  <AvatarImage src={avatarPreview || user.avatar} alt={user.name} />
                   <AvatarFallback className="text-3xl">
                     {user.name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
                 {isEditing ? (
-                  <div className="w-full space-y-4">
+                  <div className="w-full max-w-sm mx-auto space-y-4">
                     <Input {...register('name')} className="text-2xl text-center font-bold" />
                     <div>
-                      <Label htmlFor="avatar" className="sr-only">Avatar URL</Label>
+                      <Label htmlFor="avatar-upload" className="sr-only">Upload new picture</Label>
                       <div className="relative">
+                          <Controller
+                            name="avatar"
+                            control={control}
+                            render={({ field }) => (
+                                <Input 
+                                    id="avatar-upload" 
+                                    type="file" 
+                                    accept="image/*"
+                                    className="pl-9"
+                                    onChange={(e) => {
+                                        if (e.target.files && e.target.files[0]) {
+                                            const file = e.target.files[0];
+                                            const reader = new FileReader();
+                                            reader.onloadend = () => {
+                                                setAvatarPreview(reader.result as string);
+                                                setValue('avatar', reader.result as string, { shouldDirty: true });
+                                            };
+                                            reader.readAsDataURL(file);
+                                        }
+                                    }}
+                                />
+                            )}
+                          />
                         <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                        <Input id="avatar" {...register('avatar')} placeholder="Image URL" className="pl-9" />
                       </div>
                     </div>
                   </div>
@@ -312,3 +341,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    
