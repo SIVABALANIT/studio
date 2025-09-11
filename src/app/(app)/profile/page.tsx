@@ -195,7 +195,7 @@ export default function ProfilePage() {
                   <h3 className="font-semibold mb-2 flex items-center gap-2 text-muted-foreground">
                     <Fingerprint className="w-5 h-5" /> User ID
                   </h3>
-                  <p className="text-sm text-foreground/80 font-mono">{`user-${user.id}`}</p>
+                  <p className="text-sm text-foreground/80 font-mono">{user.id}</p>
                 </div>
                 <Separator />
                 <div>

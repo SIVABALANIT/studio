@@ -32,7 +32,7 @@ export type Achievement = {
 };
 
 export type User = {
-  id: number;
+  id: string;
   name: string;
   avatar: string;
   tokens: number;

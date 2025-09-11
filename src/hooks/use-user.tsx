@@ -28,7 +28,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         if (isNewUser) {
           // For a brand new user, create a default profile
           setUser({
-            id: Date.now(), // A simple unique ID for mock purposes
+            id: firebaseUser.uid,
             name: firebaseUser.displayName || 'New User',
             avatar: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/100/100`,
             tokens: 50,
@@ -44,10 +44,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         } else {
           // For a returning user, use the mock "You" data
           // In a real app, you would fetch this from your database
-          const mockUser = users.find(u => u.name === 'You') || users[5];
+          const mockUser = users.find(u => u.id === 'user-you') || users[5];
           setUser({
             ...mockUser,
-            id: 6, // keep a stable ID for mock data relations
+            id: firebaseUser.uid,
             name: firebaseUser.displayName || mockUser.name,
             contact: firebaseUser.email || mockUser.contact,
             avatar: firebaseUser.photoURL || mockUser.avatar,
