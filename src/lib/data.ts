@@ -64,10 +64,38 @@ export const tests: Test[] = [
         { level: 3, description: 'Advanced Java features and libraries.' },
     ],
   },
-  { domainId: 'cybersecurity', levels: [] },
-  { domainId: 'ai-ml', levels: [] },
-  { domainId: 'sql', levels: [] },
-  { domainId: 'bash', levels: [] },
+  { 
+    domainId: 'cybersecurity', 
+    levels: [
+        { level: 1, description: 'Fundamental security concepts.' },
+        { level: 2, description: 'Network and application security.' },
+        { level: 3, description: 'Advanced cybersecurity topics.' },
+    ] 
+  },
+  { 
+    domainId: 'ai-ml', 
+    levels: [
+        { level: 1, description: 'Basic AI and ML concepts.' },
+        { level: 2, description: 'Supervised and unsupervised learning.' },
+        { level: 3, description: 'Deep learning and neural networks.' },
+    ] 
+  },
+  { 
+    domainId: 'sql', 
+    levels: [
+        { level: 1, description: 'Basic SQL queries and clauses.' },
+        { level: 2, description: 'Joins, subqueries, and functions.' },
+        { level: 3, description: 'Advanced SQL and database design.' },
+    ] 
+  },
+  { 
+    domainId: 'bash', 
+    levels: [
+        { level: 1, description: 'Basic commands and file operations.' },
+        { level: 2, description: 'Scripting, variables, and control structures.' },
+        { level: 3, description: 'Advanced scripting and process management.' },
+    ] 
+  },
 ];
 
 export const users: User[] = [
