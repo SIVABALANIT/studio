@@ -1,3 +1,6 @@
+
+'use client';
+
 import Link from 'next/link';
 import { domains } from '@/lib/data';
 import {
@@ -10,11 +13,33 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DomainIcon } from '@/components/domain-icon';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, User as UserIcon } from 'lucide-react';
+import { useUser } from '@/hooks/use-user';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function DashboardPage() {
+  const { user } = useUser();
+
+  const isProfileIncomplete = !user?.location || !user?.socials?.twitter || !user?.socials?.linkedin;
+
   return (
     <div className="container mx-auto animate-in fade-in-50">
+      {isProfileIncomplete && (
+        <Alert className="mb-8 bg-primary/5 border-primary/20">
+            <UserIcon className="h-4 w-4 !text-primary" />
+          <AlertTitle className="font-semibold text-primary">Complete Your Profile</AlertTitle>
+          <AlertDescription className="text-primary/80">
+            Fill out your profile to get the most out of Earn By Learn. 
+            <Button variant="link" asChild className="p-0 h-auto ml-2 text-primary font-semibold">
+                <Link href="/profile">
+                    Go to Profile
+                    <ArrowRight className="ml-1 h-4 w-4" />
+                </Link>
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div className="mb-8">
         <h1 className="text-4xl font-bold font-headline tracking-tight">
           Enhance your intelligence
