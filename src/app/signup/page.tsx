@@ -12,47 +12,43 @@ import { Label } from '@/components/ui/label';
 import { Trophy } from 'lucide-react';
 import Link from 'next/link';
 
-export default function LoginPage() {
+export default function SignupPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center text-center">
             <Trophy className="w-12 h-12 text-primary mb-2" />
-            <h1 className="text-3xl font-bold font-headline">Skill Rewards</h1>
-            <p className="text-muted-foreground">Welcome back! Please sign in to continue.</p>
+            <h1 className="text-3xl font-bold font-headline">Create an Account</h1>
+            <p className="text-muted-foreground">Join to start earning rewards for your skills.</p>
         </div>
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">Login</CardTitle>
+            <CardTitle className="text-2xl">Sign Up</CardTitle>
             <CardDescription>
-              Enter your email below to login to your account.
+              Enter your information to create an account.
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" placeholder="John Doe" required />
+            </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" placeholder="m@example.com" required />
             </div>
             <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="#"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  Forgot your password?
-                </Link>
-              </div>
+              <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" required />
             </div>
             <Button type="submit" className="w-full" asChild>
-                <Link href="/dashboard">Login</Link>
+              <Link href="/dashboard">Create Account</Link>
             </Button>
           </CardContent>
           <CardFooter className="text-center text-sm">
-              Don&apos;t have an account?{' '}
-              <Link href="/signup" className="underline ml-1">
-                Sign up
+              Already have an account?{' '}
+              <Link href="/login" className="underline ml-1">
+                Login
               </Link>
           </CardFooter>
         </Card>
