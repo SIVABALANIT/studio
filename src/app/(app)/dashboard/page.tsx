@@ -40,9 +40,6 @@ export default function DashboardPage() {
             <CardContent className="flex-1">
               <div className="flex items-center gap-2">
                 <Badge variant="outline">{domain.difficulty}</Badge>
-                <Badge variant={domain.questions?.length > 0 ? 'default' : 'secondary'}>
-                  {domain.questions?.length > 0 ? 'Available' : 'Coming Soon'}
-                </Badge>
               </div>
             </CardContent>
             <CardFooter>
