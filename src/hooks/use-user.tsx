@@ -1,9 +1,10 @@
 
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { User } from '@/lib/types';
 import { users } from '@/lib/data';
+import { useAuth } from './use-auth';
 
 interface UserContextType {
   user: User | null;
@@ -15,8 +16,28 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const initialUser = users.find(u => u.name === 'You') || users[5];
-  const [user, setUser] = useState<User | null>(initialUser);
+  const { firebaseUser, loading } = useAuth();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (!loading) {
+      if (firebaseUser) {
+        // In a real app, you would fetch user data from Firestore using firebaseUser.uid
+        // For now, we'll find the mock user and update it with Firebase data.
+        const mockUser = users.find(u => u.name === 'You') || users[5];
+        setUser({
+          ...mockUser,
+          id: 6, // keep a stable ID for mock data relations
+          name: firebaseUser.displayName || mockUser.name,
+          contact: firebaseUser.email || mockUser.contact,
+          avatar: firebaseUser.photoURL || mockUser.avatar,
+        });
+      } else {
+        setUser(null);
+      }
+    }
+  }, [firebaseUser, loading]);
+  
 
   const addTokens = (amount: number) => {
     setUser(currentUser => {
@@ -46,6 +67,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const updateUser = (updatedData: Partial<User>) => {
     setUser(currentUser => {
       if (!currentUser) return null;
+      // In a real app, you'd also update this in Firestore
       return { ...currentUser, ...updatedData };
     });
   };

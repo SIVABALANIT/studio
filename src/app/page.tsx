@@ -1,18 +1,23 @@
+
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import Image from 'next/image';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function Home() {
+  const { firebaseUser } = useAuth();
   return (
     <div className="flex flex-col min-h-screen">
       <header className="p-4 flex justify-between items-center">
         <Logo />
-        <Link href="/login">
+        <Link href={firebaseUser ? "/dashboard" : "/login"}>
             <Button variant="outline">
-                Login
+                {firebaseUser ? "Go to Dashboard" : "Login"}
             </Button>
         </Link>
       </header>
