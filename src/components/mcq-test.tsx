@@ -60,14 +60,19 @@ export function McqTest({ test, domain }: McqTestProps) {
     const rewardTokens = correctAnswers;
 
     addTokens(rewardTokens);
+
+    // This will show the explanations for each question
     setIsFinished(true);
     setIsSubmitting(false);
 
-    const params = new URLSearchParams({
-      score: finalScore.toString(),
-      rewardTokens: rewardTokens.toString(),
-    });
-    router.push(`/test/${domain.id}/result?${params.toString()}`);
+    // After a delay, navigate to the results page
+    setTimeout(() => {
+        const params = new URLSearchParams({
+            score: finalScore.toString(),
+            rewardTokens: rewardTokens.toString(),
+        });
+        router.push(`/test/${domain.id}/result?${params.toString()}`);
+    }, 5000); // 5-second delay to review answers
   };
   
   const AnswerOption = ({ question, option }: { question: Question, option: string }) => {
@@ -112,6 +117,7 @@ export function McqTest({ test, domain }: McqTestProps) {
             Question {currentQuestionIndex + 1}: {currentQuestion.question}
           </CardTitle>
           {!isFinished && <CardDescription>Select the correct answer below.</CardDescription>}
+           {isFinished && <CardDescription>Review the correct answers before proceeding to your results.</CardDescription>}
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -130,23 +136,21 @@ export function McqTest({ test, domain }: McqTestProps) {
           <p className="text-sm text-muted-foreground">
             Question {currentQuestionIndex + 1} of {test.questions.length}
           </p>
-          {!isFinished && (
-            isLastQuestion ? (
-              <Button
+          {isLastQuestion ? (
+             <Button
                 onClick={handleSubmit}
-                disabled={!selectedAnswers[currentQuestion.id] || isSubmitting}
+                disabled={!selectedAnswers[currentQuestion.id] || isSubmitting || isFinished}
                 size="lg"
               >
                 {isSubmitting ? 'Calculating...' : 'Finish & See Score'}
               </Button>
-            ) : (
-              <Button
-                onClick={handleNext}
-                disabled={!selectedAnswers[currentQuestion.id]}
-              >
-                Next Question
-              </Button>
-            )
+          ) : (
+            <Button
+              onClick={handleNext}
+              disabled={!selectedAnswers[currentQuestion.id] || isFinished}
+            >
+              Next Question
+            </Button>
           )}
         </CardFooter>
       </Card>
