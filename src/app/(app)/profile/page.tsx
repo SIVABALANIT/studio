@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useUser } from '@/hooks/use-user';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Flame, Mail, MapPin, Twitter, Linkedin, Edit, Save, X, Award, Star, Shield, Image as ImageIcon } from 'lucide-react';
+import { Flame, Mail, MapPin, Twitter, Linkedin, Edit, Save, X, Award, Star, Shield, Image as ImageIcon, CircleDollarSign, Fingerprint } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -162,6 +162,20 @@ export default function ProfilePage() {
                 <CardTitle>Details</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
+                <div>
+                  <h3 className="font-semibold mb-2 flex items-center gap-2 text-muted-foreground">
+                    <Fingerprint className="w-5 h-5" /> User ID
+                  </h3>
+                  <p className="text-sm text-foreground/80 font-mono">{`user-${user.id}`}</p>
+                </div>
+                <Separator />
+                 <div>
+                  <h3 className="font-semibold mb-2 flex items-center gap-2 text-muted-foreground">
+                    <CircleDollarSign className="w-5 h-5" /> Total Tokens
+                  </h3>
+                  <p className="font-bold text-lg text-primary">{user.tokens.toLocaleString()}</p>
+                </div>
+                <Separator />
                 <div>
                   <h3 className="font-semibold mb-2 flex items-center gap-2 text-muted-foreground">
                     <Mail className="w-5 h-5" /> Contact Information
