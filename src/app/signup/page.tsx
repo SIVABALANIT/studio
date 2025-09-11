@@ -53,7 +53,7 @@ export default function SignupPage() {
               title: 'Email already exists',
               description: 'Please log in with your existing account.',
             });
-            router.push('/login');
+            router.push(`/login?email=${encodeURIComponent(email)}`);
           } else {
             toast({
                 title: 'Signup Failed',
