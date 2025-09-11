@@ -48,7 +48,7 @@ export default function TestResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const score = searchParams.get('score');
-  const rewardTokens = search_params.get('rewardTokens');
+  const rewardTokens = searchParams.get('rewardTokens');
 
   if (!score || !rewardTokens) {
     return (
