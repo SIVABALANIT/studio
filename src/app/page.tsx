@@ -12,7 +12,7 @@ export default function Home() {
       </header>
       <main className="flex-1 flex flex-col items-center justify-center text-center p-6">
         <Badge variant="outline" className="mb-4">
-          earn by learn
+          Earn By Learn
         </Badge>
         <h2 className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight font-headline">
           Turn Your Knowledge <br /> into <span className="text-primary">Rewards</span>
@@ -28,7 +28,7 @@ export default function Home() {
         </Link>
       </main>
       <footer className="p-4 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} earn by learn. All rights reserved.
+        © {new Date().getFullYear()} Earn By Learn. All rights reserved.
       </footer>
     </div>
   );

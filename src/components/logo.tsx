@@ -1,4 +1,4 @@
-import { Trophy } from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function Logo({
@@ -15,10 +15,8 @@ export function Logo({
         className
       )}
     >
-      <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-        <span className="text-sm font-bold">EbL</span>
-      </div>
-      {showText && <span>earn by learn</span>}
+        <GraduationCap className="h-8 w-8" />
+      {showText && <span>Earn By Learn</span>}
     </div>
   );
 }
