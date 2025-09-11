@@ -1,6 +1,7 @@
 
 'use client';
 
+import React from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +18,10 @@ const AnimatedCounter = ({ endValue }: { endValue: number }) => {
     const [count, setCount] = React.useState(0);
   
     React.useEffect(() => {
-      if (endValue === 0) return;
+      if (endValue === 0) {
+        setCount(0);
+        return;
+      };
       const duration = 1000;
       const frameRate = 60;
       const totalFrames = Math.round((duration / 1000) * frameRate);
@@ -44,10 +48,9 @@ export default function TestResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const score = searchParams.get('score');
-  const rewardTokens = searchParams.get('rewardTokens');
-  const reasoning = searchParams.get('reasoning');
+  const rewardTokens = search_params.get('rewardTokens');
 
-  if (!score || !rewardTokens || !reasoning) {
+  if (!score || !rewardTokens) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center">
         <Card className="w-full max-w-lg">
@@ -81,12 +84,6 @@ export default function TestResultPage() {
                         +<AnimatedCounter endValue={parseInt(rewardTokens)} />
                     </div>
                     <p className="text-muted-foreground text-sm mt-1">Tokens Rewarded</p>
-                </div>
-                <div className="text-left p-4 bg-secondary rounded-lg border">
-                    <h4 className="font-semibold mb-2">Reward Reasoning</h4>
-                    <p className="text-sm text-muted-foreground">
-                        {reasoning}
-                    </p>
                 </div>
             </CardContent>
             <CardFooter className="mt-4 sm:justify-center">

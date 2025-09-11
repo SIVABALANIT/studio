@@ -13,12 +13,11 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from './ui/button';
 import { PartyPopper } from 'lucide-react';
-import type { GenerateRewardMagnitudeOutput } from '@/ai/flows/generate-reward-magnitude';
 
 type RewardModalProps = {
   open: boolean;
   score: number;
-  rewardData: GenerateRewardMagnitudeOutput | null;
+  rewardTokens: number;
   onClose: () => void;
 };
 
@@ -49,7 +48,7 @@ const AnimatedCounter = ({ endValue }: { endValue: number }) => {
   return <span className="tabular-nums">{count.toLocaleString()}</span>;
 };
 
-export function RewardModal({ open, score, rewardData, onClose }: RewardModalProps) {
+export function RewardModal({ open, score, rewardTokens, onClose }: RewardModalProps) {
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md text-center">
@@ -64,18 +63,10 @@ export function RewardModal({ open, score, rewardData, onClose }: RewardModalPro
         </DialogHeader>
         <div className="my-6">
           <div className="text-6xl font-extrabold text-primary">
-            +<AnimatedCounter endValue={rewardData?.rewardTokens ?? 0} />
+            +<AnimatedCounter endValue={rewardTokens ?? 0} />
           </div>
           <p className="text-muted-foreground text-sm mt-1">Tokens Rewarded</p>
         </div>
-        {rewardData?.reasoning && (
-          <div className="text-left p-4 bg-secondary rounded-lg border">
-            <h4 className="font-semibold mb-2">Reward Reasoning</h4>
-            <p className="text-sm text-muted-foreground">
-              {rewardData.reasoning}
-            </p>
-          </div>
-        )}
         <DialogFooter className="mt-4 sm:justify-center">
           <Link href="/dashboard" passHref>
             <Button size="lg" className="w-full">Back to Dashboard</Button>

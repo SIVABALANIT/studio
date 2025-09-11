@@ -12,8 +12,6 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { getReward } from '@/lib/actions';
-import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
 import type { Test, Domain, Question } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -32,7 +30,6 @@ export function McqTest({ test, domain }: McqTestProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   
-  const { toast } = useToast();
   const { addTokens } = useUser();
 
   const currentQuestion = test.questions[currentQuestionIndex];
@@ -60,32 +57,17 @@ export function McqTest({ test, domain }: McqTestProps) {
     });
 
     const finalScore = Math.round((correctAnswers / test.questions.length) * 100);
+    const rewardTokens = correctAnswers;
 
-    const result = await getReward({
-      testScore: finalScore,
-      domain: domain.name,
-      testDifficulty: domain.difficulty,
-    });
-
-    if (result.success && result.data) {
-      addTokens(result.data.rewardTokens);
-      setIsFinished(true);
-
-      const params = new URLSearchParams({
-        score: finalScore.toString(),
-        rewardTokens: result.data.rewardTokens.toString(),
-        reasoning: result.data.reasoning,
-      });
-      router.push(`/test/${domain.id}/result?${params.toString()}`);
-
-    } else {
-      toast({
-        title: 'Error',
-        description: result.error,
-        variant: 'destructive',
-      });
-    }
+    addTokens(rewardTokens);
+    setIsFinished(true);
     setIsSubmitting(false);
+
+    const params = new URLSearchParams({
+      score: finalScore.toString(),
+      rewardTokens: rewardTokens.toString(),
+    });
+    router.push(`/test/${domain.id}/result?${params.toString()}`);
   };
   
   const AnswerOption = ({ question, option }: { question: Question, option: string }) => {
