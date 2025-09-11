@@ -106,6 +106,8 @@ export default function ProfilePage() {
     return badges;
   }
 
+  const enrolledDomains = domains.filter(domain => (user.progress?.[domain.id] || 0) > 0);
+
   return (
     <div className="container mx-auto max-w-6xl">
        <div className="mb-8 flex items-center justify-between">
@@ -245,47 +247,56 @@ export default function ProfilePage() {
                 <CardTitle>Progress & Certifications</CardTitle>
               </CardHeader>
               <CardContent className="space-y-8">
-                <div>
-                  <h3 className="font-semibold mb-4 text-lg">Levels Completed</h3>
-                  <div className="space-y-4">
-                    {domains.map((domain: Domain) => {
-                      const completedLevels = user.progress?.[domain.id] || 0;
-                      return (
-                        <div key={domain.id}>
-                          <div className="flex items-center gap-3">
-                            <DomainIcon icon={domain.icon} className="h-6 w-6" />
-                            <span className="font-medium flex-1">{domain.name}</span>
-                            <span className="text-muted-foreground text-sm">
-                              Level <span className="font-bold text-foreground">{completedLevels}</span>
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-                <Separator />
-                 <div>
-                  <h3 className="font-semibold mb-4 text-lg">Certifications</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {domains.map((domain: Domain) => (
-                      <div key={domain.id} className="rounded-lg border bg-card p-4">
-                        <div className="flex items-center gap-3 mb-3">
-                           <DomainIcon icon={domain.icon} className="h-6 w-6" />
-                           <h4 className="font-semibold flex-1">{domain.name}</h4>
-                        </div>
-                        <div className="flex justify-around items-end h-20">
-                            {getBadgesForDomain(domain.id).length > 0 ? getBadgesForDomain(domain.id).map(badge => (
-                                <div key={badge.name} className="text-center">
-                                    <BadgeIcon level={badge.level as any} />
-                                    <p className="text-xs mt-1 font-medium">{badge.name}</p>
-                                </div>
-                            )) : <p className="text-sm text-muted-foreground self-center">No badges yet.</p>}
-                        </div>
+                {enrolledDomains.length > 0 ? (
+                  <>
+                    <div>
+                      <h3 className="font-semibold mb-4 text-lg">Levels Completed</h3>
+                      <div className="space-y-4">
+                        {enrolledDomains.map((domain: Domain) => {
+                          const completedLevels = user.progress?.[domain.id] || 0;
+                          return (
+                            <div key={domain.id}>
+                              <div className="flex items-center gap-3">
+                                <DomainIcon icon={domain.icon} className="h-6 w-6" />
+                                <span className="font-medium flex-1">{domain.name}</span>
+                                <span className="text-muted-foreground text-sm">
+                                  Level <span className="font-bold text-foreground">{completedLevels}</span>
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
-                    ))}
+                    </div>
+                    <Separator />
+                    <div>
+                      <h3 className="font-semibold mb-4 text-lg">Certifications</h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {enrolledDomains.map((domain: Domain) => (
+                          <div key={domain.id} className="rounded-lg border bg-card p-4">
+                            <div className="flex items-center gap-3 mb-3">
+                              <DomainIcon icon={domain.icon} className="h-6 w-6" />
+                              <h4 className="font-semibold flex-1">{domain.name}</h4>
+                            </div>
+                            <div className="flex justify-around items-end h-20">
+                                {getBadgesForDomain(domain.id).length > 0 ? getBadgesForDomain(domain.id).map(badge => (
+                                    <div key={badge.name} className="text-center">
+                                        <BadgeIcon level={badge.level as any} />
+                                        <p className="text-xs mt-1 font-medium">{badge.name}</p>
+                                    </div>
+                                )) : <p className="text-sm text-muted-foreground self-center">No badges yet.</p>}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center py-12">
+                    <h3 className="text-lg font-semibold">No Progress Yet</h3>
+                    <p className="text-muted-foreground mt-2">Start a test to see your progress here.</p>
                   </div>
-                </div>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -294,5 +305,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    
