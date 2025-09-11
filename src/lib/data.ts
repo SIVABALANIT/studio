@@ -103,5 +103,5 @@ export const users: User[] = [
     { id: 'user-3', name: 'James Smith', avatar: 'https://picsum.photos/seed/avatar3/100/100', tokens: 980, progress: {} },
     { id: 'user-4', name: 'Priya Patel', avatar: 'https://picsum.photos/seed/avatar4/100/100', tokens: 950, progress: { 'sql': 1 } },
     { id: 'user-5', name: 'Chen Wei', avatar: 'https://picsum.photos/seed/avatar5/100/100', tokens: 820, progress: {} },
-    { id: 'user-you', name: 'You', avatar: 'https://picsum.photos/seed/avatar6/100/100', tokens: 200, progress: {}, contact: "you@example.com", location: "Your City", socials: { twitter: "@you", linkedin: "linkedin.com/in/you"}, streak: 5 },
+    { id: 'user-you', name: 'You', avatar: 'https://picsum.photos/seed/avatar6/100/100', tokens: 1300, progress: {}, contact: "you@example.com", location: "Your City", socials: { twitter: "@you", linkedin: "linkedin.com/in/you"}, streak: 5 },
 ];
