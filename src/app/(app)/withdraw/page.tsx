@@ -15,6 +15,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useUser } from '@/hooks/use-user';
 import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 const TOKEN_TO_RUPEE_RATE = 0.1; // 10 rupees / 100 tokens
 const MINIMUM_WITHDRAWAL_AMOUNT = 500;
@@ -23,40 +34,30 @@ export default function WithdrawPage() {
   const { user, addTokens } = useUser();
   const { toast } = useToast();
   const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [upiId, setUpiId] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleWithdraw = () => {
+  const handleConfirmWithdrawal = () => {
     const amount = parseInt(withdrawAmount, 10);
-    if (!user || !amount || amount <= 0) {
+    if (!upiId) {
       toast({
-        title: 'Invalid Amount',
-        description: 'Please enter a valid number of tokens to withdraw.',
+        title: 'UPI ID Required',
+        description: 'Please enter your UPI ID to proceed.',
         variant: 'destructive',
       });
       return;
     }
-    if (amount < MINIMUM_WITHDRAWAL_AMOUNT) {
-      toast({
-        title: 'Minimum Withdrawal',
-        description: `You must withdraw at least ${MINIMUM_WITHDRAWAL_AMOUNT} tokens.`,
-        variant: 'destructive',
-      });
-      return;
-    }
-    if (amount > user.tokens) {
-      toast({
-        title: 'Insufficient Tokens',
-        description: 'You do not have enough tokens to withdraw that amount.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
+    
     addTokens(-amount);
-    setWithdrawAmount('');
+    
     toast({
       title: 'Withdrawal Successful',
-      description: `You have successfully withdrawn ${amount.toLocaleString()} tokens.`,
+      description: `You have successfully withdrawn ${amount.toLocaleString()} tokens to UPI ID: ${upiId}.`,
     });
+
+    setWithdrawAmount('');
+    setUpiId('');
+    setIsDialogOpen(false);
   };
 
   const rupeesValue = useMemo(() => {
@@ -107,9 +108,34 @@ export default function WithdrawPage() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full" size="lg" onClick={handleWithdraw} disabled={isButtonDisabled}>
-            Withdraw Now
-          </Button>
+            <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <AlertDialogTrigger asChild>
+                    <Button className="w-full" size="lg" disabled={isButtonDisabled}>
+                        Withdraw Now
+                    </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                    <AlertDialogTitle>Confirm Withdrawal</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Please enter your UPI ID to receive the payment. The amount of ₹{rupeesValue.toFixed(2)} will be transferred.
+                    </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <div className="space-y-2">
+                        <Label htmlFor="upi-id">UPI ID</Label>
+                        <Input 
+                            id="upi-id"
+                            placeholder="yourname@bank"
+                            value={upiId}
+                            onChange={(e) => setUpiId(e.target.value)}
+                        />
+                    </div>
+                    <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleConfirmWithdrawal}>Confirm</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </CardFooter>
       </Card>
     </div>
