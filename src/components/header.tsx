@@ -13,7 +13,7 @@ export function Header() {
     <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6">
       <SidebarTrigger />
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 rounded-full bg-yellow-400/20 text-yellow-700 px-3 py-1.5 text-sm font-medium">
+        <div className="flex items-center gap-2 rounded-full bg-pink-400/20 text-pink-700 px-3 py-1.5 text-sm font-medium">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -22,7 +22,7 @@ export function Header() {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="h-5 w-5 text-yellow-500"
+            className="h-5 w-5 text-pink-500"
           >
             <circle cx="12" cy="12" r="10" />
             <path d="M12 6v12" />
