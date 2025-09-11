@@ -11,15 +11,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Trophy } from 'lucide-react';
 import Link from 'next/link';
+import { Logo } from '@/components/logo';
 
 export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center text-center">
-            <Trophy className="w-12 h-12 text-primary mb-2" />
-            <h1 className="text-3xl font-bold font-headline">earn by learn</h1>
-            <p className="text-muted-foreground">Welcome back! Please sign in to continue.</p>
+            <Logo className="text-3xl" />
+            <p className="text-muted-foreground mt-2">Welcome back! Please sign in to continue.</p>
         </div>
         <Card>
           <CardHeader>

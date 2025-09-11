@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { Header } from '@/components/header';
 import { UserProvider } from '@/hooks/use-user';
 import { Badge } from '@/components/ui/badge';
+import { Logo } from '@/components/logo';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -21,10 +22,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="flex h-screen bg-background text-foreground">
           <Sidebar>
             <SidebarHeader className="p-4">
-              <div className="flex items-center gap-2">
-                <Trophy className="w-8 h-8 text-primary" />
-                <h1 className="text-2xl font-bold font-headline">earn by learn</h1>
-              </div>
+              <Logo />
             </SidebarHeader>
             <SidebarContent className="p-2">
               <SidebarMenu>

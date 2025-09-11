@@ -2,12 +2,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { Logo } from '@/components/logo';
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-primary">earn by learn</h1>
+        <Logo />
       </header>
       <main className="flex-1 flex flex-col items-center justify-center text-center p-6">
         <Badge variant="outline" className="mb-4">
