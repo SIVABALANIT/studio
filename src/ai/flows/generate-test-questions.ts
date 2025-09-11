@@ -41,20 +41,24 @@ const prompt = ai.definePrompt({
   name: 'generateTestQuestionsPrompt',
   input: { schema: GenerateTestQuestionsInputSchema },
   output: { schema: GenerateTestQuestionsOutputSchema },
-  prompt: `You are an expert test creator for an educational platform.
+  prompt: `You are an expert test creator for an educational platform. Your primary source for questions should be the content available on https://www.w3schools.com.
 
 Generate 10 unique multiple-choice questions for a test based on the following criteria:
 
 Domain: {{domain}}
-Difficulty Level: {{level}}
+Difficulty Level: {{level}} (1 is beginner, and the difficulty increases with the number)
 User ID: {{userId}}
 
 - The questions should be unique for this specific user.
+- The questions should be based on the content for the given domain from w3schools.com.
 - The difficulty should be appropriate for the specified level.
 - Each question must have exactly 4 options.
-- Provide a clear explanation for the correct answer.
+- Provide a clear explanation for the correct answer based on w3schools.com content.
 - Ensure the 'id' for each question is a unique number starting from 1.
 `,
+  config: {
+    model: 'googleai/gemini-1.5-flash',
+  },
 });
 
 
@@ -69,3 +73,4 @@ const generateTestQuestionsFlow = ai.defineFlow(
     return output!;
   }
 );
+
