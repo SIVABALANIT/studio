@@ -18,6 +18,7 @@ import { Header } from '@/components/header';
 import { UserProvider } from '@/hooks/use-user';
 import { Logo } from '@/components/logo';
 import { AuthProvider, useAuth } from '@/hooks/use-auth';
+import { UserDropdown } from '@/components/user-dropdown';
 
 function AppSidebar() {
 
@@ -82,6 +83,9 @@ function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarSeparator />
+        <div className="p-2">
+          <UserDropdown />
+        </div>
       </SidebarFooter>
     </Sidebar>
   )
