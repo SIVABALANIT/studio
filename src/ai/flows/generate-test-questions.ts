@@ -55,9 +55,7 @@ User ID: {{userId}}
 - Provide a clear explanation for the correct answer.
 - Ensure the 'id' for each question is a unique number starting from 1.
 `,
-  config: {
-    model: 'googleai/gemini-1.5-flash',
-  }
+  model: 'googleai/gemini-1.5-flash',
 });
 
 
