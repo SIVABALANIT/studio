@@ -11,7 +11,7 @@ export default function Home() {
       </header>
       <main className="flex-1 flex flex-col items-center justify-center text-center p-6">
         <Badge variant="outline" className="mb-4">
-          Learn. Earn. Grow.
+          earn by learn
         </Badge>
         <h2 className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight font-headline">
           Turn Your Knowledge <br /> into <span className="text-primary">Rewards</span>
