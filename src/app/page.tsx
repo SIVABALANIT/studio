@@ -19,7 +19,7 @@ export default function Home() {
       <main className="flex-1 grid grid-cols-1 md:grid-cols-2 items-center justify-center p-6 gap-12">
         <div className="flex justify-center">
             <Image 
-                src="https://picsum.photos/seed/hero/600/600"
+                src="https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop"
                 alt="Earn by Learn"
                 width={500}
                 height={500}

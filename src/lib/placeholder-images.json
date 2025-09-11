@@ -40,7 +40,7 @@
     {
       "id": "hero",
       "description": "Hero image for landing page",
-      "imageUrl": "https://picsum.photos/seed/hero/600/600",
+      "imageUrl": "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop",
       "imageHint": "education growth"
     }
   ]
