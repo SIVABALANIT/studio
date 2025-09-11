@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-primary">Skill Rewards</h1>
+        <h1 className="text-2xl font-bold text-primary">earn by learn</h1>
       </header>
       <main className="flex-1 flex flex-col items-center justify-center text-center p-6">
         <Badge variant="outline" className="mb-4">
@@ -27,7 +27,7 @@ export default function Home() {
         </Link>
       </main>
       <footer className="p-4 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} Skill Rewards. All rights reserved.
+        © {new Date().getFullYear()} earn by learn. All rights reserved.
       </footer>
     </div>
   );

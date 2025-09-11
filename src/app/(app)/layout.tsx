@@ -22,7 +22,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <SidebarHeader className="p-4">
               <div className="flex items-center gap-2">
                 <Trophy className="w-8 h-8 text-primary" />
-                <h1 className="text-2xl font-bold font-headline">Skill Rewards</h1>
+                <h1 className="text-2xl font-bold font-headline">earn by learn</h1>
               </div>
             </SidebarHeader>
             <SidebarContent className="p-2">

@@ -18,7 +18,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center text-center">
             <Trophy className="w-12 h-12 text-primary mb-2" />
-            <h1 className="text-3xl font-bold font-headline">Skill Rewards</h1>
+            <h1 className="text-3xl font-bold font-headline">earn by learn</h1>
             <p className="text-muted-foreground">Welcome back! Please sign in to continue.</p>
         </div>
         <Card>
