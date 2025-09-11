@@ -39,8 +39,8 @@ export default function DashboardPage() {
             <CardContent className="flex-1"></CardContent>
             <CardFooter>
               <Link href={`/test/${domain.id}`} className="w-full">
-                <Button className="w-full" disabled={!domain.questions || domain.questions.length === 0}>
-                  Start Test
+                <Button className="w-full">
+                  Start Learning
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>

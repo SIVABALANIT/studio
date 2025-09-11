@@ -16,7 +16,10 @@ export type Question = {
 
 export type Test = {
   domainId: string;
-  questions: Question[];
+  levels: {
+    level: number;
+    description: string;
+  }[];
 };
 
 export type User = {
