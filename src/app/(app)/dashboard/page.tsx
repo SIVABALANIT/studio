@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { DomainIcon } from '@/components/domain-icon';
 import { ArrowRight } from 'lucide-react';
 
@@ -30,18 +29,14 @@ export default function DashboardPage() {
             key={domain.id}
             className="flex flex-col transition-all hover:shadow-lg hover:-translate-y-1"
           >
-            <CardHeader className="flex-row items-start gap-4 space-y-0">
+            <CardHeader className="flex-row items-start gap-4 space-y-0 pb-4">
               <DomainIcon icon={domain.icon} className="h-10 w-10 text-primary" />
               <div className="flex-1">
                 <CardTitle className="font-headline text-2xl">{domain.name}</CardTitle>
                 <CardDescription className="mt-1">{domain.description}</CardDescription>
               </div>
             </CardHeader>
-            <CardContent className="flex-1">
-              <div className="flex items-center gap-2">
-                <Badge variant="outline">{domain.difficulty}</Badge>
-              </div>
-            </CardContent>
+            <CardContent className="flex-1"></CardContent>
             <CardFooter>
               <Link href={`/test/${domain.id}`} className="w-full">
                 <Button className="w-full" disabled={!domain.questions || domain.questions.length === 0}>
