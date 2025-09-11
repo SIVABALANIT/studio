@@ -61,7 +61,7 @@ export function RewardModal({ open, score, rewardData }: RewardModalProps) {
           </DialogDescription>
         </DialogHeader>
         <div className="my-6">
-          <div className="text-6xl font-extrabold text-accent">
+          <div className="text-6xl font-extrabold text-primary">
             +<AnimatedCounter endValue={rewardData?.rewardTokens ?? 0} />
           </div>
           <p className="text-muted-foreground text-sm mt-1">Tokens Rewarded</p>

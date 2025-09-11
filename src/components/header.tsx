@@ -21,7 +21,7 @@ export function Header() {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="h-5 w-5 text-accent"
+            className="h-5 w-5 text-primary"
           >
             <circle cx="12" cy="12" r="10" />
             <path d="M12 6v12" />
