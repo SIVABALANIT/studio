@@ -68,7 +68,7 @@ Test Difficulty: {{testDifficulty}}
 Based on these factors, determine the number of reward tokens and provide a brief explanation of your reasoning.
 `,
   config: {
-    model: 'googleai/gemini-2.5-flash',
+    model: 'googleai/gemini-1.5-flash',
   }
 });
 
