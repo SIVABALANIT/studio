@@ -1,3 +1,4 @@
+
 import {
   Sidebar,
   SidebarContent,
@@ -7,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { Home, BarChart3, Trophy, CircleDollarSign } from 'lucide-react';
+import { Home, BarChart3, Trophy, CircleDollarSign, User as UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { Header } from '@/components/header';
 import { UserProvider } from '@/hooks/use-user';
@@ -48,6 +49,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     <Link href="/withdraw">
                       <CircleDollarSign />
                       <span>Withdraw</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild tooltip="Profile">
+                    <Link href="/profile">
+                      <UserIcon />
+                      <span>Profile</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
