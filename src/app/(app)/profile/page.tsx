@@ -125,7 +125,7 @@ export default function ProfilePage() {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-8 md:grid-cols-1">
-          <div className="md:col-span-1 space-y-8">
+          <div className="space-y-8">
             <Card>
               <CardHeader className="items-center text-center">
                 <Avatar className="h-24 w-24 mb-4">
@@ -167,13 +167,6 @@ export default function ProfilePage() {
                     <Fingerprint className="w-5 h-5" /> User ID
                   </h3>
                   <p className="text-sm text-foreground/80 font-mono">{`user-${user.id}`}</p>
-                </div>
-                <Separator />
-                 <div>
-                  <h3 className="font-semibold mb-2 flex items-center gap-2 text-muted-foreground">
-                    <CircleDollarSign className="w-5 h-5" /> Total Tokens
-                  </h3>
-                  <p className="font-bold text-lg text-primary">{user.tokens.toLocaleString()}</p>
                 </div>
                 <Separator />
                 <div>
