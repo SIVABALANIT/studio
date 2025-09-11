@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff } from 'lucide-react';
+import { FirebaseError } from 'firebase/app';
 
 export default function SignupPage() {
   const { signup } = useAuth();
@@ -47,11 +48,19 @@ export default function SignupPage() {
       await signup(email, password, name);
       router.push('/dashboard');
     } catch (error: any) {
-      toast({
-        title: 'Signup Failed',
-        description: error.message,
-        variant: 'destructive',
-      });
+        if (error instanceof FirebaseError && error.code === 'auth/email-already-in-use') {
+            toast({
+              title: 'Email already exists',
+              description: 'Please log in with your existing account.',
+            });
+            router.push('/login');
+          } else {
+            toast({
+                title: 'Signup Failed',
+                description: error.message,
+                variant: 'destructive',
+            });
+        }
       setIsSubmitting(false);
     }
   };
