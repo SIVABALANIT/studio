@@ -7,7 +7,7 @@ import {
   SidebarMenuButton,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { Home, BarChart3, Trophy } from 'lucide-react';
+import { Home, BarChart3, Trophy, CircleDollarSign } from 'lucide-react';
 import Link from 'next/link';
 import { Header } from '@/components/header';
 import { UserProvider } from '@/hooks/use-user';
@@ -40,6 +40,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     <Link href="/leaderboard">
                       <BarChart3 />
                       <span>Leaderboard</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild tooltip="Withdraw">
+                    <Link href="/withdraw">
+                      <CircleDollarSign />
+                      <span>Withdraw</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
