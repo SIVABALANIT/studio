@@ -1,9 +1,13 @@
+
+'use client';
+
 import { notFound } from 'next/navigation';
 import { domains, tests } from '@/lib/data';
 import { DomainIcon } from '@/components/domain-icon';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { useUser } from '@/hooks/use-user';
 
 type TestPageProps = {
   params: {
@@ -13,15 +17,16 @@ type TestPageProps = {
 
 export default function TestPage({ params }: TestPageProps) {
   const { domain: domainId } = params;
+  const { user } = useUser();
   const domain = domains.find(d => d.id === domainId);
   const test = tests.find(t => t.domainId === domainId);
 
   if (!domain || !test) {
     notFound();
   }
-
-  // In a real app, you would track user progress. For now, we start at level 1.
-  const nextLevel = 1; 
+  
+  const lastCompletedLevel = user?.progress?.[domainId] || 0;
+  const nextLevel = lastCompletedLevel + 1;
 
   if (test.levels?.length === 0) {
     return (
@@ -47,7 +52,7 @@ export default function TestPage({ params }: TestPageProps) {
         </p>
         <Link href={`/test/${domain.id}/level/${nextLevel}`} className="w-full max-w-xs">
             <Button size="lg" className="w-full">
-                Start Level {nextLevel}
+                {lastCompletedLevel > 0 ? `Continue to Level ${nextLevel}`: `Start Level ${nextLevel}`}
                 <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
         </Link>

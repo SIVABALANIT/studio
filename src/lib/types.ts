@@ -1,3 +1,4 @@
+
 export type Domain = {
   id: string;
   name: string;
@@ -28,4 +29,7 @@ export type User = {
   name: string;
   avatar: string;
   tokens: number;
+  progress?: {
+    [domainId: string]: number; // Last completed level
+  };
 };

@@ -31,7 +31,7 @@ export function McqTest({ test, domain, level }: McqTestProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   
-  const { addTokens } = useUser();
+  const { addTokens, completeLevel } = useUser();
 
   const currentQuestion = test.questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / test.questions.length) * 100;
@@ -61,6 +61,8 @@ export function McqTest({ test, domain, level }: McqTestProps) {
     const rewardTokens = correctAnswers;
 
     addTokens(rewardTokens);
+    completeLevel(domain.id, level);
+
 
     setIsFinished(true);
     setIsSubmitting(false);

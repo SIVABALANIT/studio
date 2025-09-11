@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
@@ -7,6 +8,7 @@ import { users } from '@/lib/data';
 interface UserContextType {
   user: User | null;
   addTokens: (amount: number) => void;
+  completeLevel: (domainId: string, level: number) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -22,8 +24,26 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const completeLevel = (domainId: string, level: number) => {
+    setUser(currentUser => {
+      if (!currentUser) return null;
+      const currentProgress = currentUser.progress || {};
+      // Only update if the new level is higher than the current one
+      if ((currentProgress[domainId] || 0) < level) {
+        return {
+          ...currentUser,
+          progress: {
+            ...currentProgress,
+            [domainId]: level,
+          },
+        };
+      }
+      return currentUser;
+    });
+  }
+
   return (
-    <UserContext.Provider value={{ user, addTokens }}>
+    <UserContext.Provider value={{ user, addTokens, completeLevel }}>
       {children}
     </UserContext.Provider>
   );
