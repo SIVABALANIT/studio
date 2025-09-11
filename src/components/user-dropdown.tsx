@@ -14,14 +14,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
-import { LogOut, User as UserIcon, ChevronsUpDown } from 'lucide-react';
-import { useSidebar } from './ui/sidebar';
+import { LogOut, User as UserIcon } from 'lucide-react';
 
 export function UserDropdown() {
   const { user } = useUser();
   const { logout } = useAuth();
   const router = useRouter();
-  const { state: sidebarState } = useSidebar();
 
   const handleLogout = async () => {
     await logout();
@@ -38,13 +36,6 @@ export function UserDropdown() {
                 <AvatarImage src={user?.avatar} alt={user?.name} />
                 <AvatarFallback>{user?.name?.charAt(0) ?? 'U'}</AvatarFallback>
             </Avatar>
-            {sidebarState === 'expanded' && (
-                <div className="flex-1 truncate">
-                    <p className="font-semibold text-sm truncate">{user.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">{user.contact}</p>
-                </div>
-            )}
-            {sidebarState === 'expanded' && <ChevronsUpDown className="w-4 h-4 text-muted-foreground" />}
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" side="right" sideOffset={12} className="w-56">
@@ -65,4 +56,3 @@ export function UserDropdown() {
     </DropdownMenu>
   );
 }
-
