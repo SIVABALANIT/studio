@@ -19,6 +19,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff } from 'lucide-react';
+import { FirebaseError } from 'firebase/app';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -44,11 +45,19 @@ export default function LoginPage() {
       await login(email, password);
       router.push('/dashboard');
     } catch (error: any) {
-      toast({
-        title: 'Login Failed',
-        description: error.message,
-        variant: 'destructive',
-      });
+      if (error instanceof FirebaseError && (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential')) {
+        toast({
+            title: 'Email not exist',
+            description: "This email isn't registered. Please sign up.",
+        });
+        router.push(`/signup?email=${encodeURIComponent(email)}`);
+      } else {
+        toast({
+            title: 'Login Failed',
+            description: error.message,
+            variant: 'destructive',
+        });
+      }
       setIsSubmitting(false);
     }
   };
