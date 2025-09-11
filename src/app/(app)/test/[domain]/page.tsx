@@ -1,7 +1,7 @@
 
 'use client';
 
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import { domains, tests } from '@/lib/data';
 import { DomainIcon } from '@/components/domain-icon';
 import { Button } from '@/components/ui/button';
@@ -9,14 +9,9 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { useUser } from '@/hooks/use-user';
 
-type TestPageProps = {
-  params: {
-    domain: string;
-  };
-};
-
-export default function TestPage({ params }: TestPageProps) {
-  const { domain: domainId } = params;
+export default function TestPage() {
+  const params = useParams();
+  const domainId = params.domain as string;
   const { user } = useUser();
   const domain = domains.find(d => d.id === domainId);
   const test = tests.find(t => t.domainId === domainId);
