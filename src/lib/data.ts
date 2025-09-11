@@ -51,38 +51,38 @@ export const tests: Test[] = [
     questions: [
       {
         id: 1,
-        question: 'What is the correct file extension for Python files?',
-        options: ['.pyth', '.pt', '.py', '.python'],
-        correctAnswer: '.py',
-        explanation: 'Python files have the ".py" extension.',
+        question: 'What is a correct syntax to output "Hello World" in Python?',
+        options: ['echo "Hello World"', 'p("Hello World")', 'print("Hello World")'],
+        correctAnswer: 'print("Hello World")',
+        explanation: 'In Python, the print() function is used to output text to the console.',
       },
       {
         id: 2,
-        question: 'Which keyword is used to define a function in Python?',
-        options: ['function', 'def', 'fun', 'define'],
-        correctAnswer: 'def',
-        explanation: 'The "def" keyword is used to define a function in Python.',
+        question: "How do you insert COMMENTS in Python code?",
+        options: ["//This is a comment", "/*This is a comment*/", "#This is a comment"],
+        correctAnswer: "#This is a comment",
+        explanation: "Comments in Python start with the '#' character and extend to the end of the line."
       },
       {
         id: 3,
-        question: "How do you insert comments in Python code?",
-        options: ["//This is a comment", "/*This is a comment*/", "#This is a comment"],
-        correctAnswer: "#This is a comment",
-        explanation: "Comments in Python start with the '#' character."
+        question: "Which one is NOT a legal variable name?",
+        options: ["my-var", "Myvar", "_myvar", "my_var"],
+        correctAnswer: "my-var",
+        explanation: "Variable names in Python cannot contain hyphens. They can contain letters, numbers, and underscores, but cannot start with a number."
       },
       {
         id: 4,
-        question: "Which collection is ordered, changeable, and allows duplicate members?",
-        options: ["Tuple", "Set", "List", "Dictionary"],
-        correctAnswer: "List",
-        explanation: "A List is a collection which is ordered and changeable, and allows duplicate members."
+        question: "How do you create a variable with the numeric value 5?",
+        options: ["x = 5", "x = int(5)"],
+        correctAnswer: "x = 5",
+        explanation: "You can assign a numeric value to a variable directly. Both `x = 5` and `x = int(5)` work, but the direct assignment is the most common and straightforward way."
       },
       {
         id: 5,
-        question: "What is the result of `len(['hello', 'world'])`?",
-        options: ["2", "11", "Error", "None"],
-        correctAnswer: "2",
-        explanation: "The `len()` function returns the number of items in a list, which is 2 in this case."
+        question: "What is the correct file extension for Python files?",
+        options: [".pyth", ".py", ".pt", ".pyt"],
+        correctAnswer: ".py",
+        explanation: 'Python files are saved with the ".py" extension.'
       }
     ],
   },
