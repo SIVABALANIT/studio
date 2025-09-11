@@ -12,8 +12,8 @@ import { useAuth } from '@/hooks/use-auth';
 export default function Home() {
   const { firebaseUser } = useAuth();
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="p-4 flex justify-between items-center">
+    <div className="flex flex-col min-h-screen bg-background">
+      <header className="p-4 flex justify-between items-center sticky top-0 bg-background/80 backdrop-blur-sm z-10">
         <Logo />
         <Link href={firebaseUser ? "/dashboard" : "/login"}>
             <Button variant="outline">
@@ -21,36 +21,36 @@ export default function Home() {
             </Button>
         </Link>
       </header>
-      <main className="flex-1 grid grid-cols-1 md:grid-cols-2 items-center justify-center p-6 gap-12">
-        <div className="flex justify-center">
-            <Image 
-                src="https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop"
-                alt="Earn by Learn"
-                width={500}
-                height={500}
-                data-ai-hint="education growth"
-                className="rounded-xl shadow-2xl"
-            />
-        </div>
-        <div className="text-center md:text-left">
-            <Badge variant="outline" className="mb-4">
-            Earn By Learn
+      <main className="flex-1">
+        <section className="relative h-[60vh] flex items-center justify-center text-center text-white">
+          <Image
+            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop"
+            alt="Students learning"
+            fill
+            className="object-cover"
+            data-ai-hint="happy students learning"
+          />
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="relative z-10 p-6">
+            <Badge variant="secondary" className="mb-4">
+              Earn By Learn
             </Badge>
-            <h2 className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight font-headline">
-            Turn Your Knowledge <br /> into <span className="text-primary">Rewards</span>
-            </h2>
-            <p className="max-w-2xl text-lg text-muted-foreground mb-8 mx-auto md:mx-0">
-            Sharpen your skills in high-demand domains, take challenges, and earn tokens for your expertise. The more you learn, the more you earn.
+            <h1 className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight font-headline">
+              Turn Your Knowledge <br /> into <span className="text-amber-400">Rewards</span>
+            </h1>
+            <p className="max-w-2xl text-lg text-white/80 mb-8 mx-auto">
+              Sharpen your skills in high-demand domains, take challenges, and earn tokens for your expertise. The more you learn, the more you earn.
             </p>
             <Link href="/signup">
-            <Button size="lg">
+              <Button size="lg">
                 Get Started
                 <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+              </Button>
             </Link>
-        </div>
+          </div>
+        </section>
       </main>
-      <footer className="p-4 text-center text-sm text-muted-foreground">
+      <footer className="p-4 text-center text-sm text-muted-foreground bg-background">
         © {new Date().getFullYear()} Earn By Learn. All rights reserved.
       </footer>
     </div>
