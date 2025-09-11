@@ -14,7 +14,7 @@ import { ArrowRight } from 'lucide-react';
 
 export default function DashboardPage() {
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto animate-in fade-in-50">
       <div className="mb-8">
         <h1 className="text-4xl font-bold font-headline tracking-tight">
           Enhance your intelligence
