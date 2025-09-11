@@ -124,8 +124,8 @@ export default function ProfilePage() {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid gap-8 md:grid-cols-3">
-          <div className="md:col-span-1">
+        <div className="grid gap-8 md:grid-cols-1">
+          <div className="md:col-span-1 space-y-8">
             <Card>
               <CardHeader className="items-center text-center">
                 <Avatar className="h-24 w-24 mb-4">
@@ -157,7 +157,7 @@ export default function ProfilePage() {
               </CardContent>
             </Card>
             
-            <Card className="mt-8">
+            <Card>
               <CardHeader>
                 <CardTitle>Details</CardTitle>
               </CardHeader>
@@ -255,10 +255,10 @@ export default function ProfilePage() {
             </Card>
           </div>
 
-          <div className="md:col-span-2">
+          <div className="md:col-span-1">
             <Card>
               <CardHeader>
-                <CardTitle>Progress & Certifications</CardTitle>
+                <CardTitle>Progress &amp; Certifications</CardTitle>
               </CardHeader>
               <CardContent className="space-y-8">
                 {enrolledDomains.length > 0 ? (
