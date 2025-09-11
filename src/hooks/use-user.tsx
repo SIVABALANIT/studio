@@ -31,7 +31,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             id: Date.now(), // A simple unique ID for mock purposes
             name: firebaseUser.displayName || 'New User',
             avatar: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/100/100`,
-            tokens: 100,
+            tokens: 50,
             contact: firebaseUser.email || '',
             location: '',
             socials: {
