@@ -46,7 +46,7 @@ export default async function TestLevelPage({ params }: TestLevelPageProps) {
           </p>
         </div>
       </div>
-      <McqTest test={test} domain={domain} />
+      <McqTest test={test} domain={domain} level={level} />
     </div>
   );
 }

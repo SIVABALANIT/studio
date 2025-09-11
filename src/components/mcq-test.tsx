@@ -21,9 +21,10 @@ import { useRouter } from 'next/navigation';
 type McqTestProps = {
   test: Test;
   domain: Domain;
+  level: number;
 };
 
-export function McqTest({ test, domain }: McqTestProps) {
+export function McqTest({ test, domain, level }: McqTestProps) {
   const router = useRouter();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
@@ -61,7 +62,6 @@ export function McqTest({ test, domain }: McqTestProps) {
 
     addTokens(rewardTokens);
 
-    // This will show the explanations for each question
     setIsFinished(true);
     setIsSubmitting(false);
 
@@ -70,6 +70,7 @@ export function McqTest({ test, domain }: McqTestProps) {
         const params = new URLSearchParams({
             score: finalScore.toString(),
             rewardTokens: rewardTokens.toString(),
+            level: level.toString(),
         });
         router.push(`/test/${domain.id}/result?${params.toString()}`);
     }, 5000); // 5-second delay to review answers

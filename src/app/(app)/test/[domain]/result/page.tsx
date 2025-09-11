@@ -2,7 +2,7 @@
 'use client';
 
 import React from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -12,7 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { PartyPopper } from 'lucide-react';
+import { PartyPopper, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 const AnimatedCounter = ({ endValue }: { endValue: number }) => {
     const [count, setCount] = React.useState(0);
@@ -47,10 +48,16 @@ const AnimatedCounter = ({ endValue }: { endValue: number }) => {
 export default function TestResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+
   const score = searchParams.get('score');
   const rewardTokens = searchParams.get('rewardTokens');
+  const level = searchParams.get('level');
+  const domainId = pathname.split('/')[2];
+  
+  const nextLevel = level ? parseInt(level, 10) + 1 : 2;
 
-  if (!score || !rewardTokens) {
+  if (!score || !rewardTokens || !level) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center">
         <Card className="w-full max-w-lg">
@@ -73,7 +80,7 @@ export default function TestResultPage() {
                 <div className="bg-primary/10 rounded-full p-3 w-fit mb-4">
                     <PartyPopper className="h-10 w-10 text-primary" />
                 </div>
-                <CardTitle className="text-3xl font-bold font-headline">Test Complete!</CardTitle>
+                <CardTitle className="text-3xl font-bold font-headline">Level {level} Complete!</CardTitle>
                 <CardDescription>
                     You scored {score}% and earned new tokens.
                 </CardDescription>
@@ -86,8 +93,14 @@ export default function TestResultPage() {
                     <p className="text-muted-foreground text-sm mt-1">Tokens Rewarded</p>
                 </div>
             </CardContent>
-            <CardFooter className="mt-4 sm:justify-center">
-                <Button size="lg" className="w-full" onClick={() => router.push('/dashboard')}>Back to Dashboard</Button>
+            <CardFooter className="flex-col gap-2 mt-4 sm:flex-row sm:justify-center">
+                <Button size="lg" variant="outline" className="w-full" onClick={() => router.push('/dashboard')}>Back to Dashboard</Button>
+                <Link href={`/test/${domainId}/level/${nextLevel}`} className="w-full">
+                    <Button size="lg" className="w-full">
+                        Next Level
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                </Link>
             </CardFooter>
         </Card>
     </div>
