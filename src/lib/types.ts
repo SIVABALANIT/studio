@@ -25,6 +25,12 @@ export type Test = {
   questions: Question[];
 };
 
+export type Achievement = {
+  domainId: string;
+  badge: 'Basic' | 'Intermediate' | 'Master';
+  date: string;
+};
+
 export type User = {
   id: number;
   name: string;
@@ -40,4 +46,5 @@ export type User = {
   progress?: {
     [domainId: string]: number; // Last completed level
   };
+  achievements?: Achievement[];
 };

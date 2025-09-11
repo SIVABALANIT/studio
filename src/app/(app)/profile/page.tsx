@@ -5,13 +5,17 @@ import React, { useState, useEffect } from 'react';
 import { useUser } from '@/hooks/use-user';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Flame, Mail, MapPin, Twitter, Linkedin, Edit, Save, X } from 'lucide-react';
+import { Flame, Mail, MapPin, Twitter, Linkedin, Edit, Save, X, Award, Star, Shield } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useForm, Controller } from 'react-hook-form';
-import type { User } from '@/lib/types';
+import { useForm } from 'react-hook-form';
+import type { User, Domain } from '@/lib/types';
+import { domains } from '@/lib/data';
+import { DomainIcon } from '@/components/domain-icon';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 
 type ProfileFormData = {
     name: string;
@@ -24,11 +28,25 @@ type ProfileFormData = {
 };
 
 
+const BadgeIcon = ({ level }: { level: 'Basic' | 'Intermediate' | 'Master' }) => {
+    switch (level) {
+      case 'Basic':
+        return <Award className="w-12 h-12 text-amber-600" />;
+      case 'Intermediate':
+        return <Star className="w-12 h-12 text-slate-500" />;
+      case 'Master':
+        return <Shield className="w-12 h-12 text-yellow-500" />;
+      default:
+        return null;
+    }
+  };
+
+
 export default function ProfilePage() {
   const { user, updateUser } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   
-  const { register, handleSubmit, reset, control, formState: { isDirty } } = useForm<ProfileFormData>();
+  const { register, handleSubmit, reset, formState: { isDirty } } = useForm<ProfileFormData>();
 
   useEffect(() => {
     if (user && isEditing) {
@@ -73,14 +91,23 @@ export default function ProfilePage() {
     updateUser(updatedUser);
     setIsEditing(false);
   };
+  
+  const getBadgesForDomain = (domainId: string) => {
+    const completedLevels = user?.progress?.[domainId] || 0;
+    const badges = [];
+    if (completedLevels >= 25) badges.push({ name: 'Basic', level: 'Basic' });
+    if (completedLevels >= 50) badges.push({ name: 'Intermediate', level: 'Intermediate' });
+    if (completedLevels >= 100) badges.push({ name: 'Master', level: 'Master' });
+    return badges;
+  }
 
   return (
-    <div className="container mx-auto max-w-4xl">
+    <div className="container mx-auto max-w-6xl">
        <div className="mb-8 flex items-center justify-between">
         <div>
             <h1 className="text-4xl font-bold font-headline tracking-tight">Your Profile</h1>
             <p className="text-muted-foreground text-lg">
-            View and manage your personal information.
+            View and manage your personal information and progress.
             </p>
         </div>
         <Button variant="outline" size="icon" onClick={handleEditToggle} className="w-auto px-4 gap-2">
@@ -113,10 +140,8 @@ export default function ProfilePage() {
                 </div>
               </CardContent>
             </Card>
-          </div>
-
-          <div className="md:col-span-2">
-            <Card>
+            
+            <Card className="mt-8">
               <CardHeader>
                 <CardTitle>Details</CardTitle>
               </CardHeader>
@@ -197,6 +222,57 @@ export default function ProfilePage() {
                     </Button>
                 </CardFooter>
               )}
+            </Card>
+          </div>
+
+          <div className="md:col-span-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Progress & Certifications</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-8">
+                <div>
+                  <h3 className="font-semibold mb-4 text-lg">Levels Completed</h3>
+                  <div className="space-y-4">
+                    {domains.map((domain: Domain) => {
+                      const completedLevels = user.progress?.[domain.id] || 0;
+                      return (
+                        <div key={domain.id}>
+                          <div className="flex items-center gap-3">
+                            <DomainIcon icon={domain.icon} className="h-6 w-6" />
+                            <span className="font-medium flex-1">{domain.name}</span>
+                            <span className="text-muted-foreground text-sm">
+                              Level <span className="font-bold text-foreground">{completedLevels}</span>
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <Separator />
+                 <div>
+                  <h3 className="font-semibold mb-4 text-lg">Certifications</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {domains.map((domain: Domain) => (
+                      <div key={domain.id} className="rounded-lg border bg-card p-4">
+                        <div className="flex items-center gap-3 mb-3">
+                           <DomainIcon icon={domain.icon} className="h-6 w-6" />
+                           <h4 className="font-semibold flex-1">{domain.name}</h4>
+                        </div>
+                        <div className="flex justify-around items-end h-20">
+                            {getBadgesForDomain(domain.id).length > 0 ? getBadgesForDomain(domain.id).map(badge => (
+                                <div key={badge.name} className="text-center">
+                                    <BadgeIcon level={badge.level as any} />
+                                    <p className="text-xs mt-1 font-medium">{badge.name}</p>
+                                </div>
+                            )) : <p className="text-sm text-muted-foreground self-center">No badges yet.</p>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
             </Card>
           </div>
         </div>

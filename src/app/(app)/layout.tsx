@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarProvider,
 } from '@/components/ui/sidebar';
-import { Home, BarChart3, Trophy, CircleDollarSign, User as UserIcon } from 'lucide-react';
+import { Home, BarChart3, Trophy, CircleDollarSign, User as UserIcon, Award } from 'lucide-react';
 import Link from 'next/link';
 import { Header } from '@/components/header';
 import { UserProvider } from '@/hooks/use-user';
@@ -41,6 +41,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     <Link href="/leaderboard">
                       <BarChart3 />
                       <span>Leaderboard</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild tooltip="Achievements">
+                    <Link href="/achievements">
+                      <Award />
+                      <span>Achievements</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
