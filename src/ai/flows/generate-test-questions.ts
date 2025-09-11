@@ -56,9 +56,7 @@ User ID: {{userId}}
 - Provide a clear explanation for the correct answer based on w3schools.com content.
 - Ensure the 'id' for each question is a unique number starting from 1.
 `,
-  config: {
-    model: 'googleai/gemini-1.5-flash',
-  },
+  model: 'googleai/gemini-1.5-flash',
 });
 
 
@@ -73,4 +71,3 @@ const generateTestQuestionsFlow = ai.defineFlow(
     return output!;
   }
 );
-
