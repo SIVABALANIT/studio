@@ -19,7 +19,7 @@ export default function Home() {
         <p className="max-w-2xl text-lg text-muted-foreground mb-8">
           Sharpen your skills in high-demand domains, take challenges, and earn tokens for your expertise. The more you learn, the more you earn.
         </p>
-        <Link href="/dashboard">
+        <Link href="/login">
           <Button size="lg">
             Get Started
             <ArrowRight className="ml-2 h-5 w-5" />
