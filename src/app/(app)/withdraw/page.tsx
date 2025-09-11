@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -16,6 +17,7 @@ import { useUser } from '@/hooks/use-user';
 import { useToast } from '@/hooks/use-toast';
 
 const TOKEN_TO_RUPEE_RATE = 0.1; // 10 rupees / 100 tokens
+const MINIMUM_WITHDRAWAL_AMOUNT = 500;
 
 export default function WithdrawPage() {
   const { user, addTokens } = useUser();
@@ -28,6 +30,14 @@ export default function WithdrawPage() {
       toast({
         title: 'Invalid Amount',
         description: 'Please enter a valid number of tokens to withdraw.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    if (amount < MINIMUM_WITHDRAWAL_AMOUNT) {
+      toast({
+        title: 'Minimum Withdrawal',
+        description: `You must withdraw at least ${MINIMUM_WITHDRAWAL_AMOUNT} tokens.`,
         variant: 'destructive',
       });
       return;
@@ -54,6 +64,9 @@ export default function WithdrawPage() {
     return isNaN(amount) || amount <= 0 ? 0 : amount * TOKEN_TO_RUPEE_RATE;
   }, [withdrawAmount]);
 
+  const amountAsNumber = parseInt(withdrawAmount, 10);
+  const isButtonDisabled = !user || !withdrawAmount || amountAsNumber > user.tokens || amountAsNumber < MINIMUM_WITHDRAWAL_AMOUNT;
+
   return (
     <div className="container mx-auto max-w-lg">
       <div className="mb-8">
@@ -66,7 +79,7 @@ export default function WithdrawPage() {
         <CardHeader>
           <CardTitle>Token Conversion</CardTitle>
           <CardDescription>
-            100 tokens = ₹10.00
+            100 tokens = ₹10.00 (Minimum withdrawal is {MINIMUM_WITHDRAWAL_AMOUNT} tokens)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -81,7 +94,7 @@ export default function WithdrawPage() {
             <Input
               id="tokens-to-withdraw"
               type="number"
-              placeholder="e.g., 500"
+              placeholder={`e.g., ${MINIMUM_WITHDRAWAL_AMOUNT}`}
               value={withdrawAmount}
               onChange={(e) => setWithdrawAmount(e.target.value)}
               min="1"
@@ -94,7 +107,7 @@ export default function WithdrawPage() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full" size="lg" onClick={handleWithdraw} disabled={!user || !withdrawAmount || parseInt(withdrawAmount) > user.tokens}>
+          <Button className="w-full" size="lg" onClick={handleWithdraw} disabled={isButtonDisabled}>
             Withdraw Now
           </Button>
         </CardFooter>
