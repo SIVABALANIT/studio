@@ -23,49 +23,46 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     if (loading) return;
   
     if (firebaseUser) {
+      // Don't do anything if we already have a user and the UID matches
+      if(user && user.id === firebaseUser.uid) {
+        return;
+      }
+      
       const isNewUser = firebaseUser.metadata.creationTime === firebaseUser.metadata.lastSignInTime;
   
-      // Use a function with setUser to avoid stale state and check the previous value.
-      setUser(prevUser => {
-        // If a user is already loaded and the UID matches, don't do anything.
-        if (prevUser && prevUser.id === firebaseUser.uid) {
-          return prevUser;
-        }
-  
-        // If it's a new user, create a fresh profile.
-        if (isNewUser) {
-          return {
-            id: firebaseUser.uid,
-            name: firebaseUser.displayName || 'New User',
-            avatar: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/100/100`,
-            tokens: 0,
-            contact: firebaseUser.email || '',
-            location: '',
-            socials: {
-              twitter: '',
-              linkedin: '',
-            },
-            streak: 0,
-            progress: {},
-          };
-        }
-  
+      // If it's a new user, create a fresh profile.
+      if (isNewUser) {
+        setUser({
+          id: firebaseUser.uid,
+          name: firebaseUser.displayName || 'New User',
+          avatar: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/100/100`,
+          tokens: 50,
+          contact: firebaseUser.email || '',
+          location: '',
+          socials: {
+            twitter: '',
+            linkedin: '',
+          },
+          streak: 0,
+          progress: {},
+        });
+      } else {
         // For a returning user, use mock data as a base.
         // In a real app, you would fetch this from your database.
         const mockUser = users.find(u => u.id === 'user-you') || users[5];
-        return {
+        setUser({
           ...mockUser,
           id: firebaseUser.uid,
           name: firebaseUser.displayName || mockUser.name,
           contact: firebaseUser.email || mockUser.contact,
           avatar: firebaseUser.photoURL || mockUser.avatar,
-        };
-      });
+        });
+      }
     } else {
       // User is logged out, clear the user state.
       setUser(null);
     }
-    // We only want this to run when the firebaseUser or loading state changes.
+  // We only want this to run when the firebaseUser or loading state changes.
   }, [firebaseUser, loading]);
   
 
