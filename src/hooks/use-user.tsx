@@ -38,7 +38,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             id: firebaseUser.uid,
             name: firebaseUser.displayName || 'New User',
             avatar: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/100/100`,
-            tokens: 50,
+            tokens: 0,
             contact: firebaseUser.email || '',
             location: '',
             socials: {
