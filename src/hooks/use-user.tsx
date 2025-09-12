@@ -22,42 +22,46 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!loading) {
       if (firebaseUser) {
-        // Check if this is a newly created user from Firebase
-        const isNewUser = firebaseUser.metadata.creationTime === firebaseUser.metadata.lastSignInTime;
+        // Only set the initial user data if a user is not already set.
+        // This prevents overwriting state on re-login or hot-reloads.
+        if (!user) {
+          const isNewUser = firebaseUser.metadata.creationTime === firebaseUser.metadata.lastSignInTime;
 
-        if (isNewUser) {
-          // For a brand new user, create a default profile
-          setUser({
-            id: firebaseUser.uid,
-            name: firebaseUser.displayName || 'New User',
-            avatar: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/100/100`,
-            tokens: 50,
-            contact: firebaseUser.email || '',
-            location: '',
-            socials: {
-              twitter: '',
-              linkedin: '',
-            },
-            streak: 0,
-            progress: {},
-          });
-        } else {
-          // For a returning user, use the mock "You" data
-          // In a real app, you would fetch this from your database
-          const mockUser = users.find(u => u.id === 'user-you') || users[5];
-          setUser({
-            ...mockUser,
-            id: firebaseUser.uid,
-            name: firebaseUser.displayName || mockUser.name,
-            contact: firebaseUser.email || mockUser.contact,
-            avatar: firebaseUser.photoURL || mockUser.avatar,
-          });
+          if (isNewUser) {
+            // For a brand new user, create a default profile
+            setUser({
+              id: firebaseUser.uid,
+              name: firebaseUser.displayName || 'New User',
+              avatar: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/100/100`,
+              tokens: 50,
+              contact: firebaseUser.email || '',
+              location: '',
+              socials: {
+                twitter: '',
+                linkedin: '',
+              },
+              streak: 0,
+              progress: {},
+            });
+          } else {
+            // For a returning user, use the mock "You" data as a base
+            // In a real app, you would fetch this from your database
+            const mockUser = users.find(u => u.id === 'user-you') || users[5];
+            setUser({
+              ...mockUser,
+              id: firebaseUser.uid,
+              name: firebaseUser.displayName || mockUser.name,
+              contact: firebaseUser.email || mockUser.contact,
+              avatar: firebaseUser.photoURL || mockUser.avatar,
+            });
+          }
         }
       } else {
+        // If firebaseUser is null, it means the user logged out. Reset user state.
         setUser(null);
       }
     }
-  }, [firebaseUser, loading]);
+  }, [firebaseUser, loading, user]);
   
 
   const addTokens = (amount: number) => {
