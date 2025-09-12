@@ -20,48 +20,53 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    if (!loading) {
-      if (firebaseUser) {
-        // Only set the initial user data if a user is not already set.
-        // This prevents overwriting state on re-login or hot-reloads.
-        if (!user) {
-          const isNewUser = firebaseUser.metadata.creationTime === firebaseUser.metadata.lastSignInTime;
-
-          if (isNewUser) {
-            // For a brand new user, create a default profile
-            setUser({
-              id: firebaseUser.uid,
-              name: firebaseUser.displayName || 'New User',
-              avatar: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/100/100`,
-              tokens: 50,
-              contact: firebaseUser.email || '',
-              location: '',
-              socials: {
-                twitter: '',
-                linkedin: '',
-              },
-              streak: 0,
-              progress: {},
-            });
-          } else {
-            // For a returning user, use the mock "You" data as a base
-            // In a real app, you would fetch this from your database
-            const mockUser = users.find(u => u.id === 'user-you') || users[5];
-            setUser({
-              ...mockUser,
-              id: firebaseUser.uid,
-              name: firebaseUser.displayName || mockUser.name,
-              contact: firebaseUser.email || mockUser.contact,
-              avatar: firebaseUser.photoURL || mockUser.avatar,
-            });
-          }
+    if (loading) return;
+  
+    if (firebaseUser) {
+      const isNewUser = firebaseUser.metadata.creationTime === firebaseUser.metadata.lastSignInTime;
+  
+      // Use a function with setUser to avoid stale state and check the previous value.
+      setUser(prevUser => {
+        // If a user is already loaded and the UID matches, don't do anything.
+        if (prevUser && prevUser.id === firebaseUser.uid) {
+          return prevUser;
         }
-      } else {
-        // If firebaseUser is null, it means the user logged out. Reset user state.
-        setUser(null);
-      }
+  
+        // If it's a new user, create a fresh profile.
+        if (isNewUser) {
+          return {
+            id: firebaseUser.uid,
+            name: firebaseUser.displayName || 'New User',
+            avatar: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/100/100`,
+            tokens: 50,
+            contact: firebaseUser.email || '',
+            location: '',
+            socials: {
+              twitter: '',
+              linkedin: '',
+            },
+            streak: 0,
+            progress: {},
+          };
+        }
+  
+        // For a returning user, use mock data as a base.
+        // In a real app, you would fetch this from your database.
+        const mockUser = users.find(u => u.id === 'user-you') || users[5];
+        return {
+          ...mockUser,
+          id: firebaseUser.uid,
+          name: firebaseUser.displayName || mockUser.name,
+          contact: firebaseUser.email || mockUser.contact,
+          avatar: firebaseUser.photoURL || mockUser.avatar,
+        };
+      });
+    } else {
+      // User is logged out, clear the user state.
+      setUser(null);
     }
-  }, [firebaseUser, loading, user]);
+    // We only want this to run when the firebaseUser or loading state changes.
+  }, [firebaseUser, loading]);
   
 
   const addTokens = (amount: number) => {
