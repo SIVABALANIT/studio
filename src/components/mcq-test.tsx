@@ -46,6 +46,19 @@ export function McqTest({ test, domain, level }: McqTestProps) {
 
   const { addTokens, completeLevel } = useUser();
 
+  const currentQuestion = test.questions[currentQuestionIndex];
+  const progress = ((currentQuestionIndex + 1) / test.questions.length) * 100;
+  const isLastQuestion = currentQuestionIndex === test.questions.length - 1;
+
+  const handleNext = () => {
+    if (!isLastQuestion) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    } else {
+      handleSubmit();
+    }
+  };
+
+
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
@@ -96,12 +109,8 @@ export function McqTest({ test, domain, level }: McqTestProps) {
       return;
     }
 
-    if (timeLeft === 0) {
-      if (isLastQuestion) {
-        handleSubmit();
-      } else {
-        handleNext();
-      }
+    if (timeLeft <= 0) {
+      handleNext();
       return;
     }
 
@@ -130,20 +139,9 @@ export function McqTest({ test, domain, level }: McqTestProps) {
     }, 3000);
   };
 
-
-  const currentQuestion = test.questions[currentQuestionIndex];
-  const progress = ((currentQuestionIndex + 1) / test.questions.length) * 100;
-  const isLastQuestion = currentQuestionIndex === test.questions.length - 1;
-
   const handleSelectAnswer = (questionId: number, answer: string) => {
     if (isFinished) return;
     setSelectedAnswers(prev => ({ ...prev, [questionId]: answer }));
-  };
-
-  const handleNext = () => {
-    if (!isLastQuestion) {
-      setCurrentQuestionIndex(prev => prev + 1);
-    }
   };
 
   const handleSubmit = async () => {
