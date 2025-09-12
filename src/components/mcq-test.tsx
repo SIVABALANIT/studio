@@ -15,7 +15,7 @@ import { Progress } from '@/components/ui/progress';
 import { useUser } from '@/hooks/use-user';
 import type { Test, Domain, Question } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { CheckCircle, XCircle, ShieldAlert } from 'lucide-react';
+import { CheckCircle, XCircle, ShieldAlert, Timer } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -42,6 +42,7 @@ export function McqTest({ test, domain, level }: McqTestProps) {
   const [isFinished, setIsFinished] = useState(false);
   const [cheatingDetected, setCheatingDetected] = useState(false);
   const [isPageVisible, setIsPageVisible] = useState(true);
+  const [timeLeft, setTimeLeft] = useState(90);
 
   const { addTokens, completeLevel } = useUser();
 
@@ -90,6 +91,31 @@ export function McqTest({ test, domain, level }: McqTestProps) {
     };
   }, [toast]);
 
+  useEffect(() => {
+    if (isFinished || cheatingDetected) {
+      return;
+    }
+
+    if (timeLeft === 0) {
+      if (isLastQuestion) {
+        handleSubmit();
+      } else {
+        handleNext();
+      }
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft(prevTime => prevTime - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft, isFinished, cheatingDetected, currentQuestionIndex]);
+
+  useEffect(() => {
+    setTimeLeft(90); // Reset timer for each new question
+  }, [currentQuestionIndex]);
+
 
   const failTest = () => {
     setIsFinished(true);
@@ -121,6 +147,7 @@ export function McqTest({ test, domain, level }: McqTestProps) {
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting || isFinished) return;
     setIsSubmitting(true);
     let correctAnswers = 0;
     test.questions.forEach(q => {
@@ -216,7 +243,13 @@ export function McqTest({ test, domain, level }: McqTestProps) {
 
       <Card className={cn(cheatingDetected && 'blur-sm pointer-events-none')}>
         <CardHeader>
-          <Progress value={progress} className="mb-4" />
+          <div className="flex justify-between items-center mb-4">
+            <Progress value={progress} className="w-full mr-4" />
+            <div className="flex items-center gap-2 text-muted-foreground font-medium tabular-nums">
+                <Timer className="h-5 w-5" />
+                <span>{timeLeft}s</span>
+            </div>
+          </div>
           <CardTitle className="text-xl leading-relaxed select-none">
             Question {currentQuestionIndex + 1}: {currentQuestion.question}
           </CardTitle>
