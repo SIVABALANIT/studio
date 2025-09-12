@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   CardContent,
@@ -50,13 +50,48 @@ export function McqTest({ test, domain, level }: McqTestProps) {
   const progress = ((currentQuestionIndex + 1) / test.questions.length) * 100;
   const isLastQuestion = currentQuestionIndex === test.questions.length - 1;
 
-  const handleNext = () => {
+  const handleSubmit = useCallback(async () => {
+    if (isSubmitting || isFinished) return;
+    setIsSubmitting(true);
+    let correctAnswers = 0;
+    test.questions.forEach(q => {
+      if (selectedAnswers[q.id] === q.correctAnswer) {
+        correctAnswers++;
+      }
+    });
+
+    const finalScore = Math.round((correctAnswers / test.questions.length) * 100);
+    const levelPassed = correctAnswers >= 8;
+    const rewardTokens = levelPassed ? correctAnswers : 0;
+    
+    if (levelPassed) {
+      addTokens(rewardTokens);
+      completeLevel(domain.id, level);
+    }
+
+
+    setIsFinished(true);
+    setIsSubmitting(false);
+
+    // After a delay, navigate to the results page
+    setTimeout(() => {
+        const params = new URLSearchParams({
+            score: finalScore.toString(),
+            rewardTokens: rewardTokens.toString(),
+            level: level.toString(),
+            levelPassed: levelPassed.toString(),
+        });
+        router.push(`/test/${domain.id}/result?${params.toString()}`);
+    }, 5000); // 5-second delay to review answers
+  }, [isSubmitting, isFinished, test.questions, selectedAnswers, addTokens, completeLevel, domain.id, level, router]);
+
+  const handleNext = useCallback(() => {
     if (!isLastQuestion) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
       handleSubmit();
     }
-  };
+  }, [isLastQuestion, handleSubmit]);
 
 
   useEffect(() => {
@@ -142,41 +177,6 @@ export function McqTest({ test, domain, level }: McqTestProps) {
   const handleSelectAnswer = (questionId: number, answer: string) => {
     if (isFinished) return;
     setSelectedAnswers(prev => ({ ...prev, [questionId]: answer }));
-  };
-
-  const handleSubmit = async () => {
-    if (isSubmitting || isFinished) return;
-    setIsSubmitting(true);
-    let correctAnswers = 0;
-    test.questions.forEach(q => {
-      if (selectedAnswers[q.id] === q.correctAnswer) {
-        correctAnswers++;
-      }
-    });
-
-    const finalScore = Math.round((correctAnswers / test.questions.length) * 100);
-    const levelPassed = correctAnswers >= 8;
-    const rewardTokens = levelPassed ? correctAnswers : 0;
-    
-    if (levelPassed) {
-      addTokens(rewardTokens);
-      completeLevel(domain.id, level);
-    }
-
-
-    setIsFinished(true);
-    setIsSubmitting(false);
-
-    // After a delay, navigate to the results page
-    setTimeout(() => {
-        const params = new URLSearchParams({
-            score: finalScore.toString(),
-            rewardTokens: rewardTokens.toString(),
-            level: level.toString(),
-            levelPassed: levelPassed.toString(),
-        });
-        router.push(`/test/${domain.id}/result?${params.toString()}`);
-    }, 5000); // 5-second delay to review answers
   };
   
   const AnswerOption = ({ question, option }: { question: Question, option: string }) => {
