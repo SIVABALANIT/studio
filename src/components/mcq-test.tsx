@@ -42,7 +42,7 @@ export function McqTest({ test, domain, level }: McqTestProps) {
   const [isFinished, setIsFinished] = useState(false);
   const [cheatingDetected, setCheatingDetected] = useState(false);
   const [isPageVisible, setIsPageVisible] = useState(true);
-  const [timeLeft, setTimeLeft] = useState(90);
+  const [timeLeft, setTimeLeft] = useState(60);
 
   const { addTokens, completeLevel } = useUser();
 
@@ -119,10 +119,10 @@ export function McqTest({ test, domain, level }: McqTestProps) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, isFinished, cheatingDetected, currentQuestionIndex]);
+  }, [timeLeft, isFinished, cheatingDetected, handleNext]);
 
   useEffect(() => {
-    setTimeLeft(90); // Reset timer for each new question
+    setTimeLeft(60); // Reset timer for each new question
   }, [currentQuestionIndex]);
 
 
