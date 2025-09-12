@@ -69,7 +69,7 @@ export default function WithdrawPage() {
   const isButtonDisabled = !user || !withdrawAmount || amountAsNumber > user.tokens || amountAsNumber < MINIMUM_WITHDRAWAL_AMOUNT;
 
   return (
-    <div className="container mx-auto max-w-lg">
+    <div className="container mx-auto max-w-lg animate-in fade-in-50">
       <div className="mb-8">
         <h1 className="text-4xl font-bold font-headline tracking-tight">Withdraw Tokens</h1>
         <p className="text-muted-foreground text-lg">

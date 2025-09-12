@@ -56,7 +56,7 @@ export default function LeaderboardPage() {
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto animate-in fade-in-50">
       <div className="mb-8">
         <h1 className="text-4xl font-bold font-headline tracking-tight">Leaderboard</h1>
         <p className="text-muted-foreground text-lg">

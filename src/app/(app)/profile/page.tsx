@@ -116,7 +116,7 @@ export default function ProfilePage() {
   const enrolledDomains = domains.filter(domain => (user.progress?.[domain.id] || 0) > 0);
 
   return (
-    <div className="container mx-auto max-w-6xl">
+    <div className="container mx-auto max-w-6xl animate-in fade-in-50">
        <div className="mb-8 flex items-center justify-between">
         <div>
             <h1 className="text-4xl font-bold font-headline tracking-tight">Your Profile</h1>
@@ -341,5 +341,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    
