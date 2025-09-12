@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -15,8 +15,17 @@ import { Progress } from '@/components/ui/progress';
 import { useUser } from '@/hooks/use-user';
 import type { Test, Domain, Question } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { CheckCircle, XCircle } from 'lucide-react';
+import { CheckCircle, XCircle, ShieldAlert } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 type McqTestProps = {
   test: Test;
@@ -26,12 +35,75 @@ type McqTestProps = {
 
 export function McqTest({ test, domain, level }: McqTestProps) {
   const router = useRouter();
+  const { toast } = useToast();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-  
+  const [cheatingDetected, setCheatingDetected] = useState(false);
+  const [isPageVisible, setIsPageVisible] = useState(true);
+
   const { addTokens, completeLevel } = useUser();
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        setIsPageVisible(false);
+        setCheatingDetected(true);
+        toast({
+          title: 'Cheating Detected!',
+          description: 'You have switched tabs. The test will be failed.',
+          variant: 'destructive',
+        });
+        failTest();
+      } else {
+        setIsPageVisible(true);
+      }
+    };
+
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+      toast({
+        title: 'Action Disabled',
+        description: 'Right-clicking is disabled during the test.',
+        variant: 'destructive',
+      });
+    };
+
+    const handleCopy = (e: ClipboardEvent) => {
+      e.preventDefault();
+      toast({
+        title: 'Action Disabled',
+        description: 'Copying is disabled during the test.',
+        variant: 'destructive',
+      });
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('copy', handleCopy);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('copy', handleCopy);
+    };
+  }, [toast]);
+
+
+  const failTest = () => {
+    setIsFinished(true);
+    setTimeout(() => {
+      const params = new URLSearchParams({
+        score: '0',
+        rewardTokens: '0',
+        level: level.toString(),
+        levelPassed: 'false',
+      });
+      router.push(`/test/${domain.id}/result?${params.toString()}`);
+    }, 3000);
+  };
+
 
   const currentQuestion = test.questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / test.questions.length) * 100;
@@ -103,7 +175,7 @@ export function McqTest({ test, domain, level }: McqTestProps) {
     return (
       <Button
         variant="outline"
-        className={cn("w-full justify-start text-left h-auto py-3 px-4", stateClasses)}
+        className={cn("w-full justify-start text-left h-auto py-3 px-4 select-none", stateClasses)}
         onClick={() => handleSelectAnswer(question.id, option)}
         disabled={isFinished}
       >
@@ -114,13 +186,38 @@ export function McqTest({ test, domain, level }: McqTestProps) {
       </Button>
     );
   }
+  
+  if (!isPageVisible && !isFinished) {
+    return (
+        <div className="fixed inset-0 bg-black/90 text-white flex flex-col items-center justify-center z-50">
+            <ShieldAlert className="w-24 h-24 text-red-500 mb-4" />
+            <h1 className="text-3xl font-bold">Cheating Detected</h1>
+            <p className="text-lg mt-2">You must stay on this page during the test.</p>
+            <p className="mt-1 text-muted-foreground">The test has been failed.</p>
+        </div>
+    )
+  }
 
   return (
     <>
-      <Card>
+      <AlertDialog open={!isPageVisible && isFinished}>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle>Cheating Detected!</AlertDialogTitle>
+                <AlertDialogDescription>
+                    You left the page during the test. Your score for this attempt is 0.
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogAction onClick={() => router.push('/dashboard')}>
+                Back to Dashboard
+            </AlertDialogAction>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <Card className={cn(cheatingDetected && 'blur-sm pointer-events-none')}>
         <CardHeader>
           <Progress value={progress} className="mb-4" />
-          <CardTitle className="text-xl leading-relaxed">
+          <CardTitle className="text-xl leading-relaxed select-none">
             Question {currentQuestionIndex + 1}: {currentQuestion.question}
           </CardTitle>
           {!isFinished && <CardDescription>Select the correct answer below.</CardDescription>}
@@ -132,10 +229,10 @@ export function McqTest({ test, domain, level }: McqTestProps) {
               <AnswerOption key={option} question={currentQuestion} option={option}/>
             ))}
           </div>
-          {isFinished && (
+          {isFinished && !cheatingDetected && (
             <div className="mt-4 p-4 bg-secondary rounded-md">
                 <h4 className="font-semibold">Explanation</h4>
-                <p className="text-muted-foreground">{currentQuestion.explanation}</p>
+                <p className="text-muted-foreground select-none">{currentQuestion.explanation}</p>
             </div>
           )}
         </CardContent>
