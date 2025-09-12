@@ -8,6 +8,7 @@ import { ArrowRight } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import Image from 'next/image';
 import { useAuth } from '@/hooks/use-auth';
+import { FallingCoins } from '@/components/falling-coins';
 
 export default function Home() {
   const { firebaseUser } = useAuth();
@@ -21,7 +22,9 @@ export default function Home() {
             </Button>
         </Link>
       </header>
-      <main className="flex-1">
+      <main className="flex-1 relative">
+        <FallingCoins className="bottom-0 left-0" />
+        <FallingCoins className="bottom-0 right-0" />
         <section className="relative h-[60vh] flex items-center justify-center text-center text-white">
           <Image
             src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop"
